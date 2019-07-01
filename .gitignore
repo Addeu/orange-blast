@@ -1,0 +1,5 @@
+#Folders to ignore
+/frameworks
+
+#Files to ignore
+*.txt
