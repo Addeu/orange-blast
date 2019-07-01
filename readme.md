@@ -1,8 +1,8 @@
-#Orange-Blast
+# Orange-Blast
 
 A test task for "Tap clap"
 
-##Main task
+## Main task
 + "Blast"-mechanic realization
 + Shift/burnout animations
 + Turns left/Points gained depiction
