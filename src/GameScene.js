@@ -13,6 +13,7 @@ const GameScene = (function() {
       this._super();
       this.addChild(new Background(), 0); //zIndex = 0
       this.addChild(new UILayer(), 1); //zIndex = 1
+      this.addChild(new MainLayer(), 2); //zIndex = 2
     }
   });
   return GameScene;

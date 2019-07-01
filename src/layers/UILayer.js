@@ -25,7 +25,7 @@ const UILayer = (function() {
       startButton.setTitleFontName("Marvin");
       startButton.setTitleFontSize(36);
       startButton.setScale(0.4);
-      startButton.setPosition(s.width * 0.5, s.height * 0.15);
+      startButton.setPosition(s.width * 0.5, s.height * 0.1);
       startButton.addTouchEventListener(this.buttonEvent, this);
       this.addChild(startButton);
     },
