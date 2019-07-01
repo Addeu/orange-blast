@@ -25,6 +25,13 @@ const MainLayer = (function() {
 
       //Initializing the game matrix and populating it with tiles
       this.runAction(cc.CallFunc.create(this.initMatrix.bind(this)));
+
+      this.listener = cc.eventManager.addListener({
+        event: cc.EventListener.TOUCH_ONE_BY_ONE,
+        swallowTouches: true,
+        onTouchBegan: this.onSelected,
+      }, this);
+
     },
 
     create2dArray(arow, acol, defValue) {
@@ -66,6 +73,11 @@ const MainLayer = (function() {
 
       this.addChild(this.tilesSpr[row][col]);
     },
+
+    onSelected(touch, event) {
+      const target = event.getCurrentTarget();
+      console.log(target);
+    }
 
   })
   return MainLayer;
