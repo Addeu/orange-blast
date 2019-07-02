@@ -16,21 +16,22 @@ const MainLayer = (function() {
     init() {
       const s = cc.winSize;
 
+
+
       const gamefield = cc.Sprite.create(res.gamefield);
       gamefield.setPosition(s.width * 0.5, s.height * 0.5);
       this.addChild(gamefield);
+
+      const notification = NotificationCenter();
+      notification.addObserver(this, this.onClick, "click");
+
+
 
       this.tilesPos = this.create2dArray(this.maxRows, this.maxCols, null);
       this.tilesSpr = this.create2dArray(this.maxRows, this.maxCols, null);
 
       //Initializing the game matrix and populating it with tiles
       this.runAction(cc.CallFunc.create(this.initMatrix.bind(this)));
-
-      this.listener = cc.eventManager.addListener({
-        event: cc.EventListener.TOUCH_ONE_BY_ONE,
-        swallowTouches: true,
-        onTouchBegan: this.onSelected,
-      }, this);
 
     },
 
@@ -65,8 +66,9 @@ const MainLayer = (function() {
     addOneTile(row, col) {
       const type = Math.floor(Math.random() * 5) + 1;
 
-      this.tilesSpr[row][col] = new cc.Sprite(`res/${type}.png`);
+      this.tilesSpr[row][col] = new TileSprite(type);
       this.tilesSpr[row][col].setAnchorPoint(0.5, 0.5);
+      this.tilesSpr[row][col].extraAttr = type;
       this.tilesSpr[row][col].rowIndex = row;
       this.tilesSpr[row][col].colIndex = col;
       this.tilesSpr[row][col].setPosition(this.tilesPos[row][col].x, this.tilesPos[row][col].y);
@@ -74,10 +76,67 @@ const MainLayer = (function() {
       this.addChild(this.tilesSpr[row][col]);
     },
 
-    onSelected(touch, event) {
-      const target = event.getCurrentTarget();
-      console.log(target);
+    onClick(target){
+      arrOfTiles = this.findTiles(target);
+      for(let i = 0; i < arrOfTiles.length; i++) {
+        arrOfTiles[i].removeFromParent();
+      }
+    },
+
+    tileExists(tile) {
+      return tile.rowIndex >= 0 && tile.rowIndex < 9 && tile.colIndex >= 0 && tile.colIndex < 9;
+    },
+
+    findTiles(tile) {
+      let neighbours = this.checkForColor(tile);
+
+      if(neighbours.length > 0) {
+        let returnArr = [tile];
+        while(neighbours.length > 0) {
+          for(let i = 0; i < neighbours.length; i++) {
+            let tilesToCheck = this.checkForColor(neighbours[i]);
+            let neighboursFiltered = tilesToCheck.filter(element => !neighbours.includes(element));
+            neighbours.push(...neighboursFiltered);
+            returnArr.push(...neighbours.splice(i, 1));
+          }
+        }
+        return returnArr;
+      }
+    },
+
+    checkForColor(tile) {
+      tile.isPicked = true;
+      const tilesToCheck = [];
+
+      const startRow = tile.rowIndex;
+      const startCol = tile.colIndex;
+
+      const upperTile = {rowIndex: startRow + 1, colIndex: startCol };
+      const lowerTile = {rowIndex: startRow - 1, colIndex: startCol };
+      const righterTile = {rowIndex: startRow, colIndex: startCol + 1};
+      const lefterTile = {rowIndex: startRow, colIndex: startCol - 1};
+
+      if(this.tileExists(upperTile)) {
+        tilesToCheck.push(upperTile);
+      }
+      if(this.tileExists(lowerTile)) {
+        tilesToCheck.push(lowerTile);
+      }
+      if(this.tileExists(righterTile)) {
+        tilesToCheck.push(righterTile);
+      }
+      if(this.tileExists(lefterTile)) {
+        tilesToCheck.push(lefterTile);
+      }
+
+      let neighbours = tilesToCheck
+          .map(element => this.tilesSpr[element.rowIndex][element.colIndex])
+          .filter(element =>element.extraAttr === tile.extraAttr)
+          .filter(tile => !tile.isPicked);
+
+      return neighbours;
     }
+
 
   })
   return MainLayer;
