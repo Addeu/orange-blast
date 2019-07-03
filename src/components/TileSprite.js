@@ -21,7 +21,7 @@ const TileSprite = (function() {
       const locationNode = target.convertToNodeSpace(touch.getLocation());
       const s = target.getContentSize();
       const rect = cc.rect(0, 0, s.width, s.height);
-
+      
       if(cc.rectContainsPoint(rect, locationNode)) {
             const notification = NotificationCenter();
             notification.postNotification("click", target);

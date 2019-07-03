@@ -5,7 +5,8 @@ var res = {
     tileRed: "res/4.png",
     tileYellow: "res/5.png",
     button: "res/button-big-purple.png",
-    gamefield: "res/gamefield.png"
+    gamefield: "res/gamefield.png",
+    MARVIN: { type: "ttf", name: "Marvin", srcs: ["res/Marvin.ttf"]}
 };
 
 var g_resources = [];

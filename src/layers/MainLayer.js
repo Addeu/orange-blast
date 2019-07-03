@@ -77,10 +77,9 @@ const MainLayer = (function() {
     },
 
     onClick(target){
-      arrOfTiles = this.findTiles(target);
-      for(let i = 0; i < arrOfTiles.length; i++) {
-        arrOfTiles[i].removeFromParent();
-      }
+      let arrOfTiles = this.findTiles(target);
+      this.destroyTiles(arrOfTiles);
+
     },
 
     tileExists(tile) {
@@ -135,7 +134,18 @@ const MainLayer = (function() {
           .filter(tile => !tile.isPicked);
 
       return neighbours;
-    }
+    },
+
+    destroyTiles(chunk) {
+      console.log(chunk);
+      chunk.forEach(tile => {
+        let fly = new cc.MoveTo(0.3, 240, 720);
+        const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
+        const chain = new cc.Sequence(fly, deletion);
+        tile.runAction(chain);
+        this.tilesSpr[tile.rowIndex][tile.colIndex] = null;
+      });
+    },
 
 
   })
