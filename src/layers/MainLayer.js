@@ -20,6 +20,19 @@ const MainLayer = (function() {
       this.field.setAnchorPoint(0.5, 0.5);
       this.addChild(this.field);
 
+      this.gameInfo = new GameInfo;
+      console.log(this.gameInfo);
+
+
+      const scoreLabel = new cc.LabelTTF(`${this.gameInfo.score} out of ${this.gameInfo.goal}`, "Marvin", 16);
+      const turnsLabel = new cc.LabelTTF(`Turns left: ${this.gameInfo.turns}`, "Marvin", 20);
+
+      scoreLabel.setPosition(s.width * 0.5, s.height * 0.95);
+      turnsLabel.setPosition(s.width * 0.5, s.heught * 0.90);
+
+      this.addChild(scoreLabel, 3);
+      this.addChild(turnsLabel, 4);
+
       this.listener = cc.eventManager.addListener({
         event: cc.EventListener.TOUCH_ONE_BY_ONE,
         swallowTouches: true,
@@ -43,6 +56,10 @@ const MainLayer = (function() {
       this.field.destroyTiles(arr);
       this.field.tilesSlideDown();
       this.field.refillTiles();
+      this.gameInfo.updateScore(arr.length);
+      this.gameInfo.updateTurns();
+      console.log(this.gameInfo.score);
+      console.log(this.gameInfo.turns);
     }
 
   });
