@@ -13,9 +13,7 @@ const UILayer = (function() {
       this._super();
       this.createScreen();
     },
-
-    // TODO: add best score/lastscore layouts
-
+    
     createScreen() {
       const s = cc.winSize;
 
