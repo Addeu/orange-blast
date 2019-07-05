@@ -1,17 +1,20 @@
 const GameInfo = (function() {
+
   class GameInfo{
+
     constructor() {
       this.turns = 50;
       this.score = 0;
       this.goal = 10000;
+      this.storage = new Storage;
       this.init();
     }
 
     init() {
       this.progressBg = new cc.Sprite(res.progressHoster);
       this.progressCourse = new cc.Sprite(res.progressBarCourse);
-      this.turnsLabel = new cc.LabelTTF(`Turns left: ${this.turns}`, "Marvin", 20);
       this.scoreLabel = new cc.LabelTTF(`${this.score} out of ${this.goal}`, "Marvin", 16);
+      this.turnsLabel = new cc.LabelTTF(`Turns left: ${this.turns}`, "Marvin", 20);
     }
 
     updateScore(number) {
@@ -35,8 +38,14 @@ const GameInfo = (function() {
     }
 
     isOver() {
-      if(this.turns <= 0 || this.score >= 10000) {
-        cc.director.runScene(new cc.TransitionSlideInR(0.25, new IntroScene));
+      if(this.turns <= 0) {
+        this.storage.setLastScore(this.score);
+        cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("You lost!")));
+      }
+      else if (this.score >= 10000) {
+        this.score += this.turns * 500;
+        this.storage.setLastScore(this.score);
+        cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("You won!!")));
       }
     }
   }
