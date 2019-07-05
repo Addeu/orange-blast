@@ -22,12 +22,12 @@ const GameInfo = (function() {
         this.score += number * 20;
         this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
       }
-      else if ( 3 < number <= 5) {
-        this.score += number * 50;
+      if ( 3 < number <= 5) {
+        this.score += number * 30;
         this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
       }
-      else if (5 < number) {
-        this.score += number * 100;
+      if (5 < number) {
+        this.score += number * 50;
         this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
       }
     }
