@@ -1,3 +1,7 @@
+/*
+Keeps and gives the score
+Uses Local Storage as DB
+*/
 const Storage = (function() {
   class Storage{
 
@@ -8,16 +12,21 @@ const Storage = (function() {
     }
 
     init() {
+      //check for existing score records
       if(cc.sys.localStorage.getItem('scoreData') == null) {
         cc.sys.localStorage.setItem('bestScore', '0');
         cc.sys.localStorage.setItem('lastScore', '0');
 
         cc.sys.localStorage.setItem('scoreData', 33);
       }
+      //setting score data
       this.bestScore = parseInt(cc.sys.localStorage.getItem('bestScore'));
       this.lastScore = parseInt(cc.sys.localStorage.getItem('lastScore'));
     }
 
+    /**
+    @param {Number} Recieves number from GameInfo module
+    */
     setLastScore(score) {
       this.lastScore = score;
 
