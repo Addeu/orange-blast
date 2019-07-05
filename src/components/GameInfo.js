@@ -33,6 +33,12 @@ const GameInfo = (function() {
       this.turns-- ;
       this.turnsLabel.setString(`Turns left: ${this.turns}`);
     }
+
+    isOver() {
+      if(this.turns <= 0 || this.score >= 10000) {
+        cc.director.runScene(new cc.TransitionSlideInR(0.25, new IntroScene));
+      }
+    }
   }
 return GameInfo;
 }());

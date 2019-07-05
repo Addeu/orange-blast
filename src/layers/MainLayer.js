@@ -52,6 +52,7 @@ const MainLayer = (function() {
       this.field.refillTiles();
       this.gameInfo.updateScore(arr.length);
       this.gameInfo.updateTurns();
+      this.gameInfo.isOver();
     }
 
   });
