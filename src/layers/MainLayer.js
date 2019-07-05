@@ -1,12 +1,5 @@
 const MainLayer = (function() {
   const MainLayer = cc.Layer.extend({
-
-      maxRows : 9, //Field size in number of rows
-      maxCols : 9, //and columns
-
-      tilesPos : null, // 2d array keeps tiles position
-      tilesSpr : null, // 2d array keeps tiles sprites
-
     ctor() {
       this._super();
       this.init();
@@ -21,17 +14,18 @@ const MainLayer = (function() {
       this.addChild(this.field);
 
       this.gameInfo = new GameInfo;
-      console.log(this.gameInfo);
+      this.gameInfo.progressBg.setPosition(s.width * 0.5, s.height * 0.95);
+      this.addChild(this.gameInfo.progressBg);
 
+      this.gameInfo.progressCourse.setPosition(s.width * 0.5, s.height * 0.95);
+      this.addChild(this.gameInfo.progressCourse);
 
-      const scoreLabel = new cc.LabelTTF(`${this.gameInfo.score} out of ${this.gameInfo.goal}`, "Marvin", 16);
-      const turnsLabel = new cc.LabelTTF(`Turns left: ${this.gameInfo.turns}`, "Marvin", 20);
+      this.gameInfo.scoreLabel.setPosition(s.width * 0.5, s.height * 0.95);
+      this.addChild(this.gameInfo.scoreLabel);
 
-      scoreLabel.setPosition(s.width * 0.5, s.height * 0.95);
-      turnsLabel.setPosition(s.width * 0.5, s.heught * 0.90);
+      this.gameInfo.turnsLabel.setPosition(s.width * 0.5, s.height * 0.85);
+      this.addChild(this.gameInfo.turnsLabel);
 
-      this.addChild(scoreLabel, 3);
-      this.addChild(turnsLabel, 4);
 
       this.listener = cc.eventManager.addListener({
         event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -58,8 +52,6 @@ const MainLayer = (function() {
       this.field.refillTiles();
       this.gameInfo.updateScore(arr.length);
       this.gameInfo.updateTurns();
-      console.log(this.gameInfo.score);
-      console.log(this.gameInfo.turns);
     }
 
   });

@@ -6,6 +6,9 @@ var res = {
     tileYellow: "res/5.png",
     button: "res/button-big-purple.png",
     gamefield: "res/gamefield.png",
+    progressHoster: "res/progress-bar-hoster.png",
+    progressBar: "res/progress-bar.png",
+    progressBarCourse: "res/progress-course.png",
     MARVIN: { type: "ttf", name: "Marvin", srcs: ["res/Marvin.ttf"]}
 };
 
