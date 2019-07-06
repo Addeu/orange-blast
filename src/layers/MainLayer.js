@@ -36,18 +36,21 @@ const MainLayer = (function() {
     },
 
     onClick(touch, event) {
+      const fieldRect = cc.rect(12, 135, 450, 450);
       const location = touch.getLocation();
       const target = event.getCurrentTarget();
-      const ly = Math.floor(location.y - 80);
-      const lx = Math.floor(location.x - 15);
-      const row =  Math.floor((ly - 80 + 25)/50);
-      const col =  Math.floor((lx - 15 + 25)/50);
-      const tile = target.field.tilesSpr[row][col];
+      if(cc.rectContainsPoint(fieldRect, location)) {
+        const ly = Math.floor(location.y - 80);
+        const lx = Math.floor(location.x - 15);
+        const row =  Math.floor((ly - 80 + 25)/50);
+        const col =  Math.floor((lx - 15 + 25)/50);
+        const tile = target.field.tilesSpr[row][col];
 
-      const arrOfTiles = target.field.findTiles(tile);
-      if(arrOfTiles != undefined) {
-        target.makeTurn(arrOfTiles);
-     }
+        const arrOfTiles = target.field.findTiles(tile);
+        if(arrOfTiles != undefined) {
+          target.makeTurn(arrOfTiles);
+       }
+      }
     },
 
     makeTurn(arr) {
