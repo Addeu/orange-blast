@@ -11,10 +11,18 @@ const GameInfo = (function() {
     }
 
     init() {
+      //Set progressBar background and information labels
       this.progressBg = new cc.Sprite(res.progressHoster);
       this.progressCourse = new cc.Sprite(res.progressBarCourse);
       this.scoreLabel = new cc.LabelTTF(`${this.score} out of ${this.goal}`, "Marvin", 16);
       this.turnsLabel = new cc.LabelTTF(`Turns left: ${this.turns}`, "Marvin", 20);
+
+
+      //Set Progress bar with Cocos2d ProgressTimer
+      this.progress = cc.ProgressTimer.create(cc.Sprite.create(res.progressBar));
+      this.progress.setType(cc.ProgressTimer.TYPE_BAR);
+      this.progress.setBarChangeRate(cc.p(1, 0));
+      this.progress.setMidpoint(cc.p(0, 0));
     }
 
     /**
@@ -25,16 +33,19 @@ const GameInfo = (function() {
     updateScore(number) {
       if(number <= 3) {
         this.score += number * 20;
-        this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
       }
       if ( 3 < number <= 5) {
         this.score += number * 30;
-        this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
       }
       if (5 < number) {
         this.score += number * 40;
-        this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
       }
+      //change Score label content
+      this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
+
+      //change ProgressBar filling
+      const fillScale = cc.progressTo(0.4, this.score/this.goal * 100);
+      this.progress.runAction(fillScale);
     }
 
     updateTurns() {
