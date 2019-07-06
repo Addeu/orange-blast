@@ -20,12 +20,14 @@ const MainLayer = (function() {
       this.gameInfo.progressCourse.setPosition(s.width * 0.5, s.height * 0.95);
       this.addChild(this.gameInfo.progressCourse);
 
+      this.gameInfo.progress.setPosition(s.width * 0.5, s.height * 0.95);
+      this.addChild(this.gameInfo.progress);
+
       this.gameInfo.scoreLabel.setPosition(s.width * 0.5, s.height * 0.95);
       this.addChild(this.gameInfo.scoreLabel);
 
       this.gameInfo.turnsLabel.setPosition(s.width * 0.5, s.height * 0.85);
       this.addChild(this.gameInfo.turnsLabel);
-
 
       this.listener = cc.eventManager.addListener({
         event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -43,7 +45,9 @@ const MainLayer = (function() {
       const tile = target.field.tilesSpr[row][col];
 
       const arrOfTiles = target.field.findTiles(tile);
-      target.makeTurn(arrOfTiles);
+      if(arrOfTiles != undefined) {
+        target.makeTurn(arrOfTiles);
+     }
     },
 
     makeTurn(arr) {

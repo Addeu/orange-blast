@@ -46,8 +46,7 @@ const MainField = (function() {
 
     initMatrix() {
 
-      const half = 25;         //half size of a tile
-      const full = half * 2; //and full size of it
+      const full = 50; //full size of a tile
 
       const baseX = 38;  //coords from which
       const baseY = 38; //the matrix starts
