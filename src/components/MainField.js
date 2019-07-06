@@ -1,3 +1,13 @@
+/*
+Is used on MainScene
+
+responsible for:
+1. creating the Gamefield
+2. creating and positioning tiles
+3. Cheking picked tiles
+4. Revoming deleted tiles
+5. Updating and refilling the gamefield
+*/
 const MainField = (function() {
   const MainField = cc.Sprite.extend({
 
@@ -15,6 +25,7 @@ const MainField = (function() {
     init() {
       const s = cc.winSize;
 
+      //Creating 2d arrays for Sprites and their position
       this.tilesPos = this.create2dArray(this.maxRows, this.maxCols, null);
       this.tilesSpr = this.create2dArray(this.maxRows, this.maxCols, null);
 
@@ -58,14 +69,23 @@ const MainField = (function() {
       this.tilesSpr[row][col].extraAttr = type;
       this.tilesSpr[row][col].rowIndex = row;
       this.tilesSpr[row][col].colIndex = col;
-      this.tilesSpr[row][col].setPosition(this.tilesPos[row][col].x, this.tilesPos[row][col].y);
+      this.tilesSpr[row][col].setPosition(40, 600);
+
+      const slide = new cc.MoveTo(0.3, this.tilesPos[row][col].x, this.tilesPos[row][col].y);
+      this.tilesSpr[row][col].runAction(slide);
       this.addChild(this.tilesSpr[row][col]);
+
     },
 
     tileExists(tile) {
-      return tile.rowIndex >= 0 && tile.rowIndex < 9 && tile.colIndex >= 0 && tile.colIndex < 9;
+      return tile.rowIndex >= 0 && tile.rowIndex < 9 && tile.colIndex >= 0 && tile.colIndex < 9 && tile != null;
     },
 
+    /**
+    Collect all tiles of similar colour to one array
+    @param {Object} Picked tile from MainLayer
+    @return {Array} of similar tiles
+    */
     findTiles(tile) {
       let neighbours = this.checkForColor(tile);
 
@@ -83,6 +103,11 @@ const MainField = (function() {
       }
     },
 
+    /**
+    Check neighbouring tiles for similar colour
+    @param {Object} Picked tile from this.findTiles
+    @return {Array} of similar neighbouring tiles
+    */
     checkForColor(tile) {
       tile.isPicked = true;
       const tilesToCheck = [];
@@ -108,7 +133,7 @@ const MainField = (function() {
         tilesToCheck.push(lefterTile);
       }
 
-      let neighbours = tilesToCheck
+      const neighbours = tilesToCheck
           .map(element => this.tilesSpr[element.rowIndex][element.colIndex])
           .filter(element =>element.extraAttr === tile.extraAttr)
           .filter(tile => !tile.isPicked);
@@ -118,9 +143,11 @@ const MainField = (function() {
 
     destroyTiles(chunk) {
       chunk.forEach(tile => {
-        let fly = new cc.MoveTo(0.4, 240, 700);
+        tile.zIndex = 99; //To make sure removing tiles are ABOVE other tiles
+        const shrinking = new cc.ScaleTo(0.5, 0.5);
+        const fly = new cc.MoveTo(0.4, 240, 700);
         const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
-        const chain = new cc.Sequence(fly, deletion);
+        const chain = new cc.Sequence(shrinking, fly, deletion);
         tile.runAction(chain);
         this.tilesSpr[tile.rowIndex][tile.colIndex] = null;
       });
@@ -158,7 +185,7 @@ const MainField = (function() {
         let hole = movingTile.emptySpace;
         let xCoord = tile.x;
         let yCoord = tile.y - hole*50;
-        let slideDown = new cc.MoveTo(0.2, xCoord, yCoord);
+        let slideDown = new cc.MoveTo(0.4, xCoord, yCoord);
         tile.runAction(slideDown);
       });
     },
