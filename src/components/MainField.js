@@ -23,7 +23,6 @@ const MainField = (function() {
     },
 
     init() {
-      const s = cc.winSize;
 
       //Creating 2d arrays for Sprites and their position
       this.tilesPos = this.create2dArray(this.maxRows, this.maxCols, null);
@@ -44,6 +43,8 @@ const MainField = (function() {
       return arr;
     },
 
+
+
     initMatrix() {
 
       const full = 50; //full size of a tile
@@ -51,7 +52,7 @@ const MainField = (function() {
       const baseX = 38;  //coords from which
       const baseY = 38; //the matrix starts
 
-      //Assignment of position on matrix and sprite
+      //Assignment of position on the matrix
       for(let row = 0; row < this.maxRows; row++) {
         for(let col = 0; col < this.maxRows; col++) {
           this.tilesPos[row][col] = cc.p(baseX + col*full, baseY + row * full);
@@ -60,6 +61,14 @@ const MainField = (function() {
       }
     },
 
+    /**
+    Add a tile sprite to the field
+    is used in:
+    this.initMatrix
+    this.refillTiles
+    @param {Number} a row to place the tile
+    @param {Number} a column to place the tile
+    */
     addOneTile(row, col) {
       const type = Math.floor(Math.random() * 5) + 1;
 
@@ -68,7 +77,7 @@ const MainField = (function() {
       this.tilesSpr[row][col].extraAttr = type;
       this.tilesSpr[row][col].rowIndex = row;
       this.tilesSpr[row][col].colIndex = col;
-      this.tilesSpr[row][col].setPosition(40, 600);
+      this.tilesSpr[row][col].setPosition(this.tilesPos[row][col].x, 450);
 
       const slide = new cc.MoveTo(0.3, this.tilesPos[row][col].x, this.tilesPos[row][col].y);
       this.tilesSpr[row][col].runAction(slide);
@@ -76,6 +85,13 @@ const MainField = (function() {
 
     },
 
+    /**
+    Checks if the tile is on the field and not null
+    is used in:
+    this.checkForColor
+    @param {Object} tile to check
+    @return {Boolean} true if exists
+    */
     tileExists(tile) {
       return tile.rowIndex >= 0 && tile.rowIndex < 9 && tile.colIndex >= 0 && tile.colIndex < 9 && tile != null;
     },
@@ -137,12 +153,19 @@ const MainField = (function() {
           .filter(element =>element.extraAttr === tile.extraAttr)
           .filter(tile => !tile.isPicked);
 
+
       return neighbours;
     },
 
+    /**
+    Provides animation and removes tiles
+    marked for deletion
+    is called from MainLayer.makeTurn
+    @param {Array} of marked tiles for deletion
+    */
     destroyTiles(chunk) {
       chunk.forEach(tile => {
-        tile.zIndex = 99; //To make sure removing tiles are ABOVE other tiles
+        tile.zIndex = 99; //To make sure removing tiles are shown ABOVE other tiles
         const shrinking = new cc.ScaleTo(0.5, 0.5);
         const fly = new cc.MoveTo(0.4, 240, 700);
         const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
@@ -152,6 +175,9 @@ const MainField = (function() {
       });
     },
 
+    /*Checks tiles for empty space below
+    Is used in this.tilesSlideDown
+    */
     whichTilesNeedMove() {
       const tilesToMove = [];
       for (let i = 1; i < this.maxRows; i++) {

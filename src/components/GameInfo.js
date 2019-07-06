@@ -1,3 +1,11 @@
+/*
+The module is responsiblefor:
+1. Keeping and updating score
+2. Counting and updating turns
+3. Write information to the local storage
+
+Is used in MainLayer
+*/
 const GameInfo = (function() {
 
   class GameInfo{

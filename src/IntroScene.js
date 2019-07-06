@@ -1,5 +1,6 @@
 /*
 First scene of the game.
+Used as Outro as well
 will show:
 1. Last score (if any)
 2. Best score (if any)
@@ -12,7 +13,7 @@ const IntroScene = (function() {
       this._super();
       this.addChild(new Background(), 0); //zIndex = 0
       this.addChild(new UILayer(), 1); //zIndex = 1
-      this.storage = new Storage;
+      this.storage = new Storage; //to get access to localStorage for results
       this.init(result);
     },
 
