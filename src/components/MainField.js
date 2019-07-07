@@ -102,14 +102,13 @@ const MainField = (function() {
     @return {Array} of similar tiles
     */
     findTiles(tile) {
-      let neighbours = this.checkForColor(tile);
-
+      const neighbours = this.checkForColor(tile);
       if(neighbours.length > 0) {
-        let returnArr = [tile];
+        const returnArr = [tile];
         while(neighbours.length > 0) {
           for(let i = 0; i < neighbours.length; i++) {
-            let tilesToCheck = this.checkForColor(neighbours[i]);
-            let neighboursFiltered = tilesToCheck.filter(element => !neighbours.includes(element));
+            const tilesToCheck = this.checkForColor(neighbours[i]);
+            const neighboursFiltered = tilesToCheck.filter(element => !neighbours.includes(element));
             neighbours.push(...neighboursFiltered);
             returnArr.push(...neighbours.splice(i, 1));
           }
@@ -203,14 +202,14 @@ const MainField = (function() {
     },
 
     tilesSlideDown() {
-      let tilesToMove = this.whichTilesNeedMove();
+      const tilesToMove = this.whichTilesNeedMove();
 
       tilesToMove.forEach(movingTile => {
-        let tile = movingTile.tile;
-        let hole = movingTile.emptySpace;
-        let xCoord = tile.x;
-        let yCoord = tile.y - hole*50;
-        let slideDown = new cc.MoveTo(0.4, xCoord, yCoord);
+        const tile = movingTile.tile;
+        const hole = movingTile.emptySpace;
+        const xCoord = tile.x;
+        const yCoord = tile.y - hole*50;
+        const slideDown = new cc.MoveTo(0.4, xCoord, yCoord);
         tile.runAction(slideDown);
       });
     },

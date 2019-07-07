@@ -68,11 +68,13 @@ const GameInfo = (function() {
     that equal number of turns left multiplie by 500
     */
     isOver() {
-      if(this.turns <= 0 && this.score < this.goal) {
-        this.storage.setLastScore(this.score);
+      //Conditions to win
+      if(this.turns <= 0 && this.score < this.goal) { //to prevent situation when the player wins on the last turn
+        this.storage.setLastScore(this.score);       //but the game considers it as a failure
         cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("Ooops! Try again!")));
       }
-      else if (this.score >= this.goal) {
+      //Conditions to fail
+      if (this.score >= this.goal) {
         this.score += this.turns * 500;
         this.storage.setLastScore(this.score);
         cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("You won!!")));
