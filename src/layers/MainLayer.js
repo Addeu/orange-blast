@@ -63,6 +63,9 @@ const MainLayer = (function() {
         const arrOfTiles = target.field.findTiles(tile);
         if(arrOfTiles != undefined) {
           target.makeTurn(arrOfTiles);
+       } else {
+          tile.isPicked = false; //to prevent innervation of the tile
+                                //because it has been clicked
        }
       }
     },
