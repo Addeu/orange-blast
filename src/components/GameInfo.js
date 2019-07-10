@@ -50,7 +50,7 @@ Is used in MainLayer
       this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
 
       //change ProgressBar filling
-      const fillScale = cc.progressTo(0.4, this.score/this.goal * 100);
+      const fillScale = cc.progressTo(CONFIG.stdAnimationTime, this.score/this.goal * 100);
       this.progress.runAction(fillScale);
     }
 
@@ -69,13 +69,13 @@ Is used in MainLayer
       //Conditions to win
       if(this.turns <= 0 && this.score < this.goal) { //to prevent situation when the player wins on the last turn
         this.storage.setLastScore(this.score);       //but the game considers it as a failure
-        cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("Ooops! Try again!")));
+        cc.director.runScene(new cc.TransitionSlideInR(CONFIG.stdAnimationTime, new IntroScene("Ooops! Try again!")));
       }
       //Conditions to fail
       if (this.score >= this.goal) {
         this.score += this.turns * 500;
         this.storage.setLastScore(this.score);
-        cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("You won!!")));
+        cc.director.runScene(new cc.TransitionSlideInR(CONFIG.stdAnimationTime, new IntroScene("You won!!")));
       }
     }
 }
