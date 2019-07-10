@@ -6,8 +6,6 @@ The module is responsiblefor:
 
 Is used in MainLayer
 */
-const GameInfo = (function() {
-
   class GameInfo{
 
     constructor() {
@@ -80,6 +78,4 @@ const GameInfo = (function() {
         cc.director.runScene(new cc.TransitionSlideInR(0.4, new IntroScene("You won!!")));
       }
     }
-  }
-return GameInfo;
-}());
+}
