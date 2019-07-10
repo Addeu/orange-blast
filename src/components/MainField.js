@@ -11,9 +11,6 @@ responsible for:
 const MainField = (function() {
   const MainField = cc.Sprite.extend({
 
-    maxRows : 9, //Field size in number of rows
-    maxCols : 9, //and columns
-
     tilesPos : null, // 2d array keeps tiles position
     tilesSpr : null, // 2d array keeps tiles sprites
 
@@ -25,8 +22,8 @@ const MainField = (function() {
     init() {
 
       //Creating 2d arrays for Sprites and their position
-      this.tilesPos = this.create2dArray(this.maxRows, this.maxCols, null);
-      this.tilesSpr = this.create2dArray(this.maxRows, this.maxCols, null);
+      this.tilesPos = this.create2dArray(CONFIG.maxRows, CONFIG.maxCols, null);
+      this.tilesSpr = this.create2dArray(CONFIG.maxRows, CONFIG.maxCols, null);
 
       //Initializing the game matrix and populating it with tiles
       this.runAction(cc.CallFunc.create(this.initMatrix.bind(this)));
@@ -47,14 +44,14 @@ const MainField = (function() {
 
     initMatrix() {
 
-      const full = 50; //full size of a tile
+      const full = CONFIG.tileSize; //full size of a tile
 
       const baseX = 38;  //coords from which
       const baseY = 38; //the matrix starts
 
       //Assignment of position on the matrix
-      for(let row = 0; row < this.maxRows; row++) {
-        for(let col = 0; col < this.maxRows; col++) {
+      for(let row = 0; row < CONFIG.maxRows; row++) {
+        for(let col = 0; col < CONFIG.maxRows; col++) {
           this.tilesPos[row][col] = cc.p(baseX + col*full, baseY + row * full);
           this.addOneTile(row, col);
         }
@@ -77,7 +74,7 @@ const MainField = (function() {
       this.tilesSpr[row][col].extraAttr = type;
       this.tilesSpr[row][col].rowIndex = row;
       this.tilesSpr[row][col].colIndex = col;
-      this.tilesSpr[row][col].setPosition(this.tilesPos[row][col].x, 450);
+      this.tilesSpr[row][col].setPosition(this.tilesPos[row][col].x, CONFIG.fieldHeight);
 
       const slide = new cc.MoveTo(0.3, this.tilesPos[row][col].x, this.tilesPos[row][col].y);
       this.tilesSpr[row][col].runAction(slide);
@@ -93,7 +90,7 @@ const MainField = (function() {
     @return {Boolean} true if exists
     */
     tileExists(tile) {
-      return tile.rowIndex >= 0 && tile.rowIndex < 9 && tile.colIndex >= 0 && tile.colIndex < 9 && tile != null;
+      return tile.rowIndex >= 0 && tile.rowIndex < CONFIG.maxRows && tile.colIndex >= 0 && tile.colIndex < CONFIG.maxCols && tile != null;
     },
 
     /**
@@ -148,9 +145,9 @@ const MainField = (function() {
     */
     destroyTiles(chunk) {
       chunk.forEach(tile => {
-        tile.zIndex = 99; //To make sure removing tiles are shown ABOVE other tiles
-        const shrinking = new cc.ScaleTo(0.5, 0.5);
-        const fly = new cc.MoveTo(0.4, 240, 700);
+        tile.zIndex = CONFIG.topMostIndex;
+        const shrinking = new cc.ScaleTo(CONFIG.stdAnimationTime, 0.5);
+        const fly = new cc.MoveTo(CONFIG.stdAnimationTime, 240, 700);
         const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
         const chain = new cc.Sequence(shrinking, fly, deletion);
         tile.runAction(chain);
@@ -163,13 +160,13 @@ const MainField = (function() {
     */
     whichTilesNeedMove() {
       const tilesToMove = [];
-      for (let i = 1; i < this.maxRows; i++) {
-        for (let j = 0; j < this.maxCols; j++) {
+      for (let i = 1; i < CONFIG.maxRows; i++) {
+        for (let j = 0; j < CONFIG.maxCols; j++) {
           if (this.tilesSpr[i][j] !== null) {
             let emptySpace = 0;
             for (let m = i - 1; m >= 0; m--) {
               if (this.tilesSpr[m][j] === null) {
-                emptySpace++
+                emptySpace++ ;
               }
             }
             if (emptySpace > 0) {
@@ -192,23 +189,23 @@ const MainField = (function() {
         const tile = movingTile.tile;
         const hole = movingTile.emptySpace;
         const xCoord = tile.x;
-        const yCoord = tile.y - hole*50;
-        const slideDown = new cc.MoveTo(0.4, xCoord, yCoord);
+        const yCoord = tile.y - hole * CONFIG.tileSize;
+        const slideDown = new cc.MoveTo(CONFIG.stdAnimationTime, xCoord, yCoord);
         tile.runAction(slideDown);
       });
     },
 
     refillTiles() {
-      for(let i = 0; i < 9; i++) {
-        for(let j = 0; j < 9; j++) {
+      for(let i = 0; i < CONFIG.maxRows; i++) {
+        for(let j = 0; j < CONFIG.maxCols; j++) {
           if(this.tilesSpr[i][j] == null) {
-            this.addOneTile(i, j)
+            this.addOneTile(i, j);
           }
         }
       }
     },
 
 
-  })
+  });
   return MainField;
 }());
