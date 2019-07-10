@@ -124,36 +124,23 @@ const MainField = (function() {
     */
     checkForColor(tile) {
       tile.isPicked = true;
-      const tilesToCheck = [];
 
       const startRow = tile.rowIndex;
       const startCol = tile.colIndex;
 
-      const upperTile = {rowIndex: startRow + 1, colIndex: startCol };
-      const lowerTile = {rowIndex: startRow - 1, colIndex: startCol };
-      const righterTile = {rowIndex: startRow, colIndex: startCol + 1};
-      const lefterTile = {rowIndex: startRow, colIndex: startCol - 1};
+      const neighbours = [
+        {rowIndex: startRow + 1, colIndex: startCol }, //upper tile
+        {rowIndex: startRow - 1, colIndex: startCol }, //lower tile
+        {rowIndex: startRow, colIndex: startCol + 1}, //tile to the right
+        {rowIndex: startRow, colIndex: startCol - 1} //tile to the left
+      ];
 
-      if(this.tileExists(upperTile)) {
-        tilesToCheck.push(upperTile);
-      }
-      if(this.tileExists(lowerTile)) {
-        tilesToCheck.push(lowerTile);
-      }
-      if(this.tileExists(righterTile)) {
-        tilesToCheck.push(righterTile);
-      }
-      if(this.tileExists(lefterTile)) {
-        tilesToCheck.push(lefterTile);
-      }
-
-      const neighbours = tilesToCheck
+      const similarNeighbours = neighbours
+          .filter(element => this.tileExists(element))
           .map(element => this.tilesSpr[element.rowIndex][element.colIndex])
-          .filter(element =>element.extraAttr === tile.extraAttr)
-          .filter(tile => !tile.isPicked);
+          .filter(element => element.extraAttr === tile.extraAttr && !element.isPicked);
 
-
-      return neighbours;
+      return similarNeighbours;
     },
 
     /**
