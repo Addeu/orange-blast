@@ -42,7 +42,7 @@ const GameInfo = (function() {
       if(number <= 3) {
         this.score += number * 20;
       }
-      if ( 3 < number <= 5) {
+      if ( (3 < number) && (number <= 5)) {
         this.score += number * 30;
       }
       if (5 < number) {
