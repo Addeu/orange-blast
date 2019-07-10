@@ -2,8 +2,7 @@
 Keeps and gives the score
 Uses Local Storage as DB
 */
-const Storage = (function() {
-  class Storage{
+class Storage {
 
     constructor() {
       this.lastscore = 0;
@@ -37,6 +36,4 @@ const Storage = (function() {
 
      cc.sys.localStorage.setItem('lastScore', this.lastScore);
     }
-  }
-  return Storage;
-}());
+}
