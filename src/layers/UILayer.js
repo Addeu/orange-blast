@@ -4,16 +4,14 @@ Returns UI layer that is used to:
   in GameScene: restarts current game with different tiles
   in OutroScene: launches game again
 */
-const UILayer = (function() {
-
-  const UILayer = cc.Layer.extend({
+const UILayer = cc.Layer.extend({
 
     ctor() {
 
       this._super();
       this.createScreen();
     },
-    
+
     createScreen() {
       const s = cc.winSize;
 
@@ -38,6 +36,4 @@ const UILayer = (function() {
         this.runAction(chain);
       }
     }
-  })
-  return UILayer;
-}());
+});

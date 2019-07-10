@@ -6,9 +6,7 @@ will show:
 2. Best score (if any)
 3. Button to start the game
 */
-const IntroScene = (function() {
-
-  const IntroScene = cc.Scene.extend({
+const IntroScene = cc.Scene.extend({
     ctor(result = "Orange BLAST!!!") {
       this._super();
       this.addChild(new Background(), 0); //zIndex = 0
@@ -32,6 +30,4 @@ const IntroScene = (function() {
       this.addChild(last);
       this.addChild(best);
     }
-  });
-  return IntroScene;
-}());
+});

@@ -2,9 +2,7 @@
 Returns Background that is used
 to add background throughout the game
 */
-const Background = (function() {
-
-  const Background = cc.Layer.extend({
+const Background = cc.Layer.extend({
 
     ctor() {
 
@@ -18,6 +16,4 @@ const Background = (function() {
 
       this.addChild(bg, 0); //zIndex = 0
     }
-  })
-  return Background;
-}());
+});
