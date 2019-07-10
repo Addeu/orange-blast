@@ -132,6 +132,16 @@ const MainField = (function() {
         {rowIndex: tile.rowIndex, colIndex: tile.colIndex - 1} //tile to the left
       ];
 
+<<<<<<< HEAD
+=======
+      const neighbours = [
+        {rowIndex: startRow + 1, colIndex: startCol }, //upper tile
+        {rowIndex: startRow - 1, colIndex: startCol }, //lower tile
+        {rowIndex: startRow, colIndex: startCol + 1}, //tile to the right
+        {rowIndex: startRow, colIndex: startCol - 1} //tile to the left
+      ];
+
+>>>>>>> de1c9901513bdda0711a5f864a17da7f999de1d4
       const similarNeighbours = neighbours
           .filter(element => this.tileExists(element))
           .map(element => this.tilesSpr[element.rowIndex][element.colIndex])
