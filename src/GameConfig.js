@@ -1,13 +1,9 @@
-class GameConfig {
-  constructor() {
-    this.maxRows = 9;
-    this.maxCols = 9;
-    this.stdAnimationTime = 0.4; //in seconds
-    this.tileSize = 50;      //tiles are squares
-    this.topMostIndex = 99; //zIndex to display above other sprites
-    this.fieldWidth = 450;
-    this.fieldHeight = 450;
-  }
-}
-
-const CONFIG = new GameConfig;
+const CONFIG = {
+  maxRows : 9,
+  maxCols : 9,
+  stdAnimationTime : 0.4, //in seconds
+  tileSize : 50,      //tiles are squares
+  topMostIndex : 99, //zIndex to display above other sprites
+  fieldWidth : 450,
+  fieldHeight : 450
+};
