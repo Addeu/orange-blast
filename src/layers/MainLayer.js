@@ -1,5 +1,4 @@
-const MainLayer = (function() {
-  const MainLayer = cc.Layer.extend({
+const MainLayer = cc.Layer.extend({
     ctor() {
       this._super();
       this.init();
@@ -16,23 +15,18 @@ const MainLayer = (function() {
 
       //Add progress bar background
       this.gameInfo = new GameInfo;
-      this.gameInfo.progressBg.setPosition(s.width * 0.5, s.height * 0.95);
-      this.addChild(this.gameInfo.progressBg);
 
-      //Add progress bar course
-      this.gameInfo.progressCourse.setPosition(s.width * 0.5, s.height * 0.95);
-      this.addChild(this.gameInfo.progressCourse);
-
-      //Add progress bar filament
-      this.gameInfo.progress.setPosition(s.width * 0.5, s.height * 0.95);
-      this.addChild(this.gameInfo.progress);
-
-      /*
-      Add score label (the order is important;
-      may be done with zIndex with the same result)
-      */
-      this.gameInfo.scoreLabel.setPosition(s.width * 0.5, s.height * 0.95);
-      this.addChild(this.gameInfo.scoreLabel);
+      //Progress bar assembling
+      const progressBarParts = [
+        this.gameInfo.progressBg,
+        this.gameInfo.progressCourse,
+        this.gameInfo.progress,
+        this.gameInfo.scoreLabel
+      ];
+      progressBarParts.forEach(element => {
+        element.setPosition(s.width * 0.5, s.height * 0.95);
+        this.addChild(element);
+      });
 
       //Add turns label
       this.gameInfo.turnsLabel.setPosition(s.width * 0.5, s.height * 0.85);
@@ -47,16 +41,21 @@ const MainLayer = (function() {
 
     onClick(touch, event) {
       //restrict listener activity within gamefield
-      const fieldRect = cc.rect(12, 135, 450, 450);
+      const fieldRect = cc.rect(12, 135, CONFIG.fieldWidth, CONFIG.fieldHeight);
       const location = touch.getLocation();
       const target = event.getCurrentTarget();
 
       //Pick up necessary tile
       if(cc.rectContainsPoint(fieldRect, location)) {
+        console.log(location);
         const ly = Math.floor(location.y - 80);
+        console.log(ly);
         const lx = Math.floor(location.x - 15);
-        const row =  Math.floor((ly - 80 + 25)/50);// 50 is tile size
-        const col =  Math.floor((lx - 15 + 25)/50);// 25 is a half of a tile
+        console.log(lx);
+        const row =  Math.floor((ly - 80 + 25)/CONFIG.tileSize);// 50 is tile size
+        console.log(row);
+        const col =  Math.floor((lx - 15 + 25)/CONFIG.tileSize);// 25 is a half of a tile
+        console.log(col);
         const tile = target.field.tilesSpr[row][col];
 
         //return array of tiles similar in colour
@@ -85,7 +84,4 @@ const MainLayer = (function() {
       this.gameInfo.updateTurns();
       this.gameInfo.isOver();
     }
-
-  });
-  return MainLayer;
-}());
+});
