@@ -47,19 +47,14 @@ const MainLayer = cc.Layer.extend({
 
       //Pick up necessary tile
       if(cc.rectContainsPoint(fieldRect, location)) {
-        console.log(location);
         const ly = Math.floor(location.y - 80);
-        console.log(ly);
         const lx = Math.floor(location.x - 15);
-        console.log(lx);
         const row =  Math.floor((ly - 80 + 25)/CONFIG.tileSize);// 50 is tile size
-        console.log(row);
         const col =  Math.floor((lx - 15 + 25)/CONFIG.tileSize);// 25 is a half of a tile
-        console.log(col);
-        const tile = target.field.tilesSpr[row][col];
+        const tile = target.field.fieldLogic.tilesSpr[row][col];
 
         //return array of tiles similar in colour
-        const arrOfTiles = target.field.findTiles(tile);
+        const arrOfTiles = target.field.fieldLogic.findTiles(tile);
         if(arrOfTiles != undefined) {
           target.makeTurn(arrOfTiles);
        } else {
