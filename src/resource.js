@@ -9,6 +9,7 @@ var res = {
     progressHoster: "res/progress-bar-hoster.png",
     progressBar: "res/progress-bar.png",
     progressBarCourse: "res/progress-course.png",
+    bombie: "res/bombie.png",
     MARVIN: { type: "ttf", name: "Marvin", srcs: ["res/Marvin.ttf"]}
 };
 
