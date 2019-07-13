@@ -35,9 +35,9 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    *Matches location with tile
-    *@params {Object} location {x, y}
-    *@return {Object} tile sprite
+    * @description Matches location with tile
+    * @params {Object} location {x, y}
+    * @return {Object} tile sprite
     */
     tilePick(location) {
 
@@ -51,22 +51,14 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    Add a tile sprite to the field
-    is used in:
-    this.initMatrix
-    this.refillTiles
-    @param {Number} a row to place the tile
-    @param {Number} a column to place the tile
+    * @description Add a tile sprite to the field
+    * @param {number} a row to place the tile
+    * @param {number} a column to place the tile
     */
     addOneTile(row, col) {
       const type = Math.floor(Math.random() * 5) + 1;
 
-      this.fieldLogic.tilesSpr[row][col] = new cc.Sprite(`res/${type}.png`);
-      this.fieldLogic.tilesSpr[row][col].setAnchorPoint(0.5, 0.5);//Anchor in the centre of the sprite
-      this.fieldLogic.tilesSpr[row][col].extraAttr = type;
-      this.fieldLogic.tilesSpr[row][col].rowIndex = row;
-      this.fieldLogic.tilesSpr[row][col].colIndex = col;
-      this.fieldLogic.tilesSpr[row][col].isBomb = false;
+      this.fieldLogic.tilesSpr[row][col] = new Tile(type, row, col);
       this.fieldLogic.tilesSpr[row][col].setPosition(this.fieldLogic.tilesPos[row][col].x, CONFIG.fieldHeight);
 
       const slide = new cc.MoveTo(0.3, this.fieldLogic.tilesPos[row][col].x, this.fieldLogic.tilesPos[row][col].y);
@@ -75,9 +67,15 @@ const MainField = cc.Sprite.extend({
 
     },
 
+
+    /**
+    * @description Animates and deletes tiles that make a bomb
+    * @param {Array} of tiles to make a bomb
+    * @param {Object} a root tile for the bomb
+    */
     assembleBomb(arr, bomb) {
       bomb.zIndex = CONFIG.topMostIndex;
-      bomb.type = 6;
+      bomb.extraAttr = 6;
       bomb.setTexture(res.bombie);
       arr.forEach(tile => {
         if(!tile.isBomb) {
@@ -91,10 +89,9 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    Provides animation and removes tiles
-    marked for deletion
-    is called from MainLayer.makeTurn
-    @param {Array} of marked tiles for deletion
+    * @description Provides animation and removes tiles
+    * marked for deletion
+    * @param {Array} of marked tiles for deletion
     */
     destroyTiles(chunk) {
       chunk.forEach(tile => {
@@ -108,6 +105,9 @@ const MainField = cc.Sprite.extend({
       });
     },
 
+    /**
+    * @description Moves remaining tiles down to fill in empty spaces
+    */
     tilesSlideDown() {
       const tilesToMove = this.fieldLogic.whichTilesNeedMove();
 
@@ -121,6 +121,11 @@ const MainField = cc.Sprite.extend({
       });
     },
 
+
+    /**
+    * @description adds tiles to empty spaces
+    * after sliding down and deletion
+    */
     refillTiles() {
       for(let i = 0; i < CONFIG.maxRows; i++) {
         for(let j = 0; j < CONFIG.maxCols; j++) {
@@ -131,6 +136,10 @@ const MainField = cc.Sprite.extend({
       }
     },
 
+    /**
+    * @description Animation to react on non-double click
+    * @param {Object} tile to animate
+    */
     bombAnimation(bomb) {
       const shrinking = new cc.ScaleTo(CONFIG.stdAnimationTime, 0.8);
       const expanding = new cc.ScaleTo(CONFIG.stdAnimationTime, 1);
