@@ -75,11 +75,7 @@ const MainLayer = cc.Layer.extend({
        }
       }
     },
-
-    onSingle(touch, event) {
-      console.log("One!");
-    },
-
+    
     onClick(touch, event) {
       //restrict listener activity within gamefield
       const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
