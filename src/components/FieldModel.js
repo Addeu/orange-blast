@@ -72,10 +72,8 @@ class FieldModel{
       {rowIndex: tile.rowIndex, colIndex: tile.colIndex - 1} //tile to the left
     ];
 
-    const similarNeighbours = neighbours
-        .filter(element => this.tileExists(element))
-        .map(element => this.tilesSpr[element.rowIndex][element.colIndex])
-        .filter(element => element.extraAttr === tile.extraAttr && !element.isPicked);
+    const similarNeighbours = this.validNeighbours(neighbours)
+          .filter(element => element.extraAttr === tile.extraAttr && !element.isPicked);
 
     return similarNeighbours;
   }
@@ -85,10 +83,16 @@ class FieldModel{
     const radius = [tile];
       for(let i = tile.rowIndex - CONFIG.blastRadius; i <= tile.rowIndex + CONFIG.blastRadius; i++) {
         for(let j = tile.colIndex - CONFIG.blastRadius; j <= tile.colIndex + CONFIG.blastRadius; j++) {
-            radius.push(this.tilesSpr[i][j]);
+            radius.push({rowIndex: i, colIndex: j});
         }
       }
-    return radius.filter(element => this.tileExists(element));
+    return this.validNeighbours(radius);
+  }
+
+  validNeighbours(arr) {
+    const validArr = arr.filter(element => this.tileExists(element))
+                        .map(element => this.tilesSpr[element.rowIndex][element.colIndex]);
+    return validArr;
   }
 
   whichTilesNeedMove() {
