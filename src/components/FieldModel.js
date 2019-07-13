@@ -5,6 +5,13 @@ class FieldModel{
     this.tilesSpr = this.create2dArray(CONFIG.maxRows, CONFIG.maxCols, null);
   }
 
+  /**
+  * @description Creates 2d array
+  * @param {number} desired number of rows
+  * @param {number} desired number of columns
+  * @param {number || string || Object || null} set default value for the array
+  * @return {Array} two dimensional array
+  */
   create2dArray(arow, acol, defValue) {
     let arr = [];
     for(let row = 0; row < arow; row++) {
@@ -17,20 +24,18 @@ class FieldModel{
   }
 
   /**
-  Checks if the tile is on the field and not null
-  is used in:
-  this.checkForColor
-  @param {Object} tile to check
-  @return {Boolean} true if exists
+  * @description Checks if the tile is on the field and not null
+  * @param {Object} tile to check
+  * @return {boolean} true if exists
   */
   tileExists(tile) {
     return tile.rowIndex >= 0 && tile.rowIndex < CONFIG.maxRows && tile.colIndex >= 0 && tile.colIndex < CONFIG.maxCols && tile != null;
   }
 
   /**
-  *Collect all tiles of similar colour to one array
-  *@param {Object} Picked tile from MainLayer
-  *@return {Array} of similar tiles
+  * @description Collect all tiles of similar colour to one array
+  * @param {Object} Picked tile from MainLayer
+  * @return {Array} of similar tiles
   */
   findTiles(tile) {
     const neighbours = this.checkForColor(tile);
@@ -49,9 +54,9 @@ class FieldModel{
   }
 
   /**
-  Check neighbouring tiles for similar colour
-  @param {Object} Picked tile from this.findTiles
-  @return {Array} of similar neighbouring tiles
+  * @description Check neighbouring tiles for similar colour
+  * @param {Object} Picked tile
+  * @return {Array} of similar neighbouring tiles
   */
   checkForColor(tile) {
     tile.isPicked = true;
@@ -69,6 +74,19 @@ class FieldModel{
         .filter(element => element.extraAttr === tile.extraAttr && !element.isPicked);
 
     return similarNeighbours;
+  }
+
+  bombBlast(tile) {
+    tile.isBomb = false;
+    const radius = [tile];
+      for(let i = tile.rowIndex - CONFIG.blastRadius; i <= tile.rowIndex + CONFIG.blastRadius; i++) {
+        for(let j = tile.colIndex - CONFIG.blastRadius; j <= tile.colIndex + CONFIG.blastRadius; j++) {
+          if(this.tileExists(this.tilesSpr[i][j])) {
+            radius.push(this.tilesSpr[i][j]);
+          }
+        }
+      }
+    return radius;
   }
 
   whichTilesNeedMove() {

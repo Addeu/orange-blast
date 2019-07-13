@@ -36,43 +36,91 @@ const MainLayer = cc.Layer.extend({
       this.listener = cc.eventManager.addListener({
         event: cc.EventListener.TOUCH_ONE_BY_ONE,
         swallowTouches: true,
-        onTouchBegan: this.onClick}, this);
+        onTouchBegan: this.clickCheck}, this);
+
+      this.timeEnd = 0;
+      this.timeActivate = 300;
     },
 
-    onClick(touch, event) {
+    clickCheck(touch, event) {
+      const target = event.getCurrentTarget();
+
+      this.timeStart = target.timeEnd;
+      target.timeEnd = Date.now();
+
+      let deltaTime = target.timeEnd - this.timeStart;
+
+      if(deltaTime <= target.timeActivate) {
+        target.onDouble(touch, event);
+      } else {
+        target.onClick(touch, event);
+      }
+
+    },
+
+    onDouble(touch, event) {
+
       //restrict listener activity within gamefield
-      const fieldRect = cc.rect(12, 135, CONFIG.fieldWidth, CONFIG.fieldHeight);
+      const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
       const location = touch.getLocation();
       const target = event.getCurrentTarget();
 
       //Pick up necessary tile
       if(cc.rectContainsPoint(fieldRect, location)) {
-        const ly = Math.floor(location.y - 80);
-        const lx = Math.floor(location.x - 15);
-        const row =  Math.floor((ly - 80 + 25)/CONFIG.tileSize);// 50 is tile size
-        const col =  Math.floor((lx - 15 + 25)/CONFIG.tileSize);// 25 is a half of a tile
-        const tile = target.field.fieldLogic.tilesSpr[row][col];
+        const tile = target.field.tilePick(location);
 
+        if(tile.isBomb) {
+          const blastRadius = target.field.fieldLogic.bombBlast(tile);
+          target.makeTurn(blastRadius, tile);
+       }
+      }
+    },
+
+    onSingle(touch, event) {
+      console.log("One!");
+    },
+
+    onClick(touch, event) {
+      //restrict listener activity within gamefield
+      const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
+      const location = touch.getLocation();
+      const target = event.getCurrentTarget();
+
+      //Pick up necessary tile
+      if(cc.rectContainsPoint(fieldRect, location)) {
+        const tile = target.field.tilePick(location);
+
+        if(tile.isBomb) {
+          target.field.bombAnimation(tile);
+        } else {
         //return array of tiles similar in colour
         const arrOfTiles = target.field.fieldLogic.findTiles(tile);
+        if(arrOfTiles.length >= CONFIG.tilesForBomb) { //check length for making bomb
+          tile.isBomb = true;
+        }
         if(arrOfTiles != undefined) {
-          target.makeTurn(arrOfTiles);
+          target.makeTurn(arrOfTiles, tile);
        } else {
           tile.isPicked = false; //to prevent innervation of the tile
                                 //because it has been clicked
        }
       }
+    }
     },
 
     /**
-    Performs main mechanics:
-    1. calls function to destroy tiles
-    2. calls gamefield update
-    3. calls score and turns update
-    @param {Array} of similar tiles from this.onClick
+    * @description Performs main mechanics:
+    * 1. calls function to destroy tiles
+    * 2. calls gamefield update
+    * 3. calls score and turns update
+    * @param {Array} of similar tiles from this.onClick
     */
-    makeTurn(arr) {
-      this.field.destroyTiles(arr);
+    makeTurn(arr, tile) {
+      if(tile.isBomb) {
+        this.field.assembleBomb(arr, tile);
+      } else {
+        this.field.destroyTiles(arr);
+      }
       this.field.tilesSlideDown();
       this.field.refillTiles();
       this.gameInfo.updateScore(arr.length);
