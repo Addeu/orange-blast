@@ -42,66 +42,61 @@ const MainLayer = cc.Layer.extend({
       this.timeActivate = 300;
     },
 
+    /**
+    * @description Checks if the pick is valid and
+    * whether it was single or double click
+    */
     clickCheck(touch, event) {
       const target = event.getCurrentTarget();
+      const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
+      const location = touch.getLocation();
+      let tile = null;
 
-      this.timeStart = target.timeEnd;
-      target.timeEnd = Date.now();
+      //Pick up necessary tile
+      if(cc.rectContainsPoint(fieldRect, location)) {
+        tile = target.field.tilePick(location);
+      };
 
-      let deltaTime = target.timeEnd - this.timeStart;
-
-      if(deltaTime <= target.timeActivate) {
-        target.onDouble(touch, event);
+      if(target.checkDouble()) {
+        target.onDouble(tile);
       } else {
-        target.onClick(touch, event);
+        target.onClick(tile);
       }
 
     },
 
-    onDouble(touch, event) {
+    checkDouble() {
+      this.timeStart = this.timeEnd;
+      this.timeEnd = Date.now();
+      let deltaTime = this.timeEnd - this.timeStart;
+      return deltaTime <= this.timeActivate;
+    },
 
-      //restrict listener activity within gamefield
-      const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
-      const location = touch.getLocation();
-      const target = event.getCurrentTarget();
-
-      //Pick up necessary tile
-      if(cc.rectContainsPoint(fieldRect, location)) {
-        const tile = target.field.tilePick(location);
-
+    onDouble(tile) {
         if(tile.isBomb) {
-          const blastRadius = target.field.fieldLogic.bombBlast(tile);
-          target.makeTurn(blastRadius, tile);
+          const blastRadius = this.field.fieldLogic.bombBlast(tile);
+          this.field.destroyTiles(blastRadius);
+          this.makeTurn(blastRadius.length);
        }
-      }
     },
-    
-    onClick(touch, event) {
-      //restrict listener activity within gamefield
-      const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
-      const location = touch.getLocation();
-      const target = event.getCurrentTarget();
 
-      //Pick up necessary tile
-      if(cc.rectContainsPoint(fieldRect, location)) {
-        const tile = target.field.tilePick(location);
-
+    onClick(tile) {
         if(tile.isBomb) {
-          target.field.bombAnimation(tile);
+          this.field.bombAnimation(tile);
         } else {
         //return array of tiles similar in colour
-        const arrOfTiles = target.field.fieldLogic.findTiles(tile);
-        if(arrOfTiles.length >= CONFIG.tilesForBomb) { //check length for making bomb
-          tile.isBomb = true;
-        }
+        const arrOfTiles = this.field.fieldLogic.findTiles(tile);
         if(arrOfTiles != undefined) {
-          target.makeTurn(arrOfTiles, tile);
-       } else {
-          tile.isPicked = false; //to prevent innervation of the tile
-                                //because it has been clicked
+          if(arrOfTiles.length >= CONFIG.tilesForBomb) { //check length for making bomb
+            tile.isBomb = true;
+            this.field.assembleBomb(arrOfTiles, tile);
+            this.makeTurn(arrOfTiles);
+          } else {
+          this.field.destroyTiles(arrOfTiles);
+          this.makeTurn(arrOfTiles.length);
+          }
        }
-      }
-    }
+     }
     },
 
     /**
@@ -111,16 +106,11 @@ const MainLayer = cc.Layer.extend({
     * 3. calls score and turns update
     * @param {Array} of similar tiles from this.onClick
     */
-    makeTurn(arr, tile) {
-      if(tile.isBomb) {
-        this.field.assembleBomb(arr, tile);
-      } else {
-        this.field.destroyTiles(arr);
-      }
+    makeTurn(number) {
       this.field.tilesSlideDown();
       this.field.refillTiles();
-      this.gameInfo.updateScore(arr.length);
+      this.gameInfo.updateScore(number);
       this.gameInfo.updateTurns();
       this.gameInfo.isOver();
-    }
+  }
 });

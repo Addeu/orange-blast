@@ -49,7 +49,11 @@ class FieldModel{
           returnArr.push(...neighbours.splice(i, 1));
         }
       }
-      return returnArr;
+      if(returnArr.length > 1) {
+        return returnArr;
+      } else {
+        tile.isPicked = false;
+      }
     }
   }
 
@@ -81,12 +85,10 @@ class FieldModel{
     const radius = [tile];
       for(let i = tile.rowIndex - CONFIG.blastRadius; i <= tile.rowIndex + CONFIG.blastRadius; i++) {
         for(let j = tile.colIndex - CONFIG.blastRadius; j <= tile.colIndex + CONFIG.blastRadius; j++) {
-          if(this.tileExists(this.tilesSpr[i][j])) {
             radius.push(this.tilesSpr[i][j]);
-          }
         }
       }
-    return radius;
+    return radius.filter(element => this.tileExists(element));
   }
 
   whichTilesNeedMove() {
