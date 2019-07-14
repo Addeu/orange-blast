@@ -1,5 +1,5 @@
 /*
-Returns UI layer that is used to:
+Returns UI layer that is used in:
   in IntroScene: starts new game
   in GameScene: restarts current game with different tiles
   in OutroScene: launches game again
@@ -28,9 +28,9 @@ const UILayer = cc.Layer.extend({
 
     buttonEvent(sender, type) {
       if(type == ccui.Widget.TOUCH_ENDED) {
-        const scale = new cc.ScaleBy(0.2, 0.8);
+        const scale = new cc.ScaleBy(CONFIG.stdAnimationTime, 0.8);//Decrease to 0.8 from original size
         const easeScale = new cc.EaseBackOut(scale);
-        const reaction = new cc.CallFunc(cc.director.runScene(new cc.TransitionSlideInR(0.25, new GameScene())));
+        const reaction = new cc.CallFunc(cc.director.runScene(new cc.TransitionSlideInR(CONFIG.stdAnimationTime, new GameScene())));
         const chain = new cc.Sequence(easeScale, reaction);
 
         this.runAction(chain);

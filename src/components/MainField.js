@@ -35,10 +35,10 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    * @description Matches location with tile
-    * @params {Object} location {x, y}
-    * @return {Object} tile sprite
-    */
+     * @description Matches location with tile
+     * @params {Object} location {x, y}
+     * @return {Object} tile sprite
+     */
     tilePick(location) {
 
       const ly = Math.floor(location.y - 80);
@@ -51,10 +51,10 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    * @description Add a tile sprite to the field
-    * @param {number} a row to place the tile
-    * @param {number} a column to place the tile
-    */
+     * @description Add a tile sprite to the field
+     * @param {number} a row to place the tile
+     * @param {number} a column to place the tile
+     */
     addOneTile(row, col) {
       const type = Math.floor(Math.random() * 5) + 1;
 
@@ -69,13 +69,13 @@ const MainField = cc.Sprite.extend({
 
 
     /**
-    * @description Animates and deletes tiles that make a bomb
-    * @param {Array} of tiles to make a bomb
-    * @param {Object} a root tile for the bomb
-    */
+     * @description Animates and deletes tiles that make a bomb
+     * @param {Array} of tiles to make a bomb
+     * @param {Object} a root tile for the bomb
+     */
     assembleBomb(arr, bomb) {
       bomb.zIndex = CONFIG.topMostIndex;
-      bomb.extraAttr = 6;
+      bomb.extraAttr = CONFIG.bombType;
       bomb.setTexture(res.bombie);
       arr.forEach(tile => {
         if(!tile.isBomb) {
@@ -89,10 +89,10 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    * @description Provides animation and removes tiles
-    * marked for deletion
-    * @param {Array} of marked tiles for deletion
-    */
+     * @description Provides animation and removes tiles
+     * marked for deletion
+     * @param {Array} of marked tiles for deletion
+     */
     destroyTiles(chunk) {
       chunk.forEach(tile => {
         tile.zIndex = CONFIG.topMostIndex;
@@ -106,8 +106,8 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    * @description Moves remaining tiles down to fill in empty spaces
-    */
+     * @description Moves remaining tiles down to fill in empty spaces
+     */
     tilesSlideDown() {
       const tilesToMove = this.fieldLogic.whichTilesNeedMove();
 
@@ -123,9 +123,9 @@ const MainField = cc.Sprite.extend({
 
 
     /**
-    * @description adds tiles to empty spaces
-    * after sliding down and deletion
-    */
+     * @description adds tiles to empty spaces
+     * after sliding down and deletion
+     */
     refillTiles() {
       for(let i = 0; i < CONFIG.maxRows; i++) {
         for(let j = 0; j < CONFIG.maxCols; j++) {
@@ -137,9 +137,9 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-    * @description Animation to react on non-double click
-    * @param {Object} tile to animate
-    */
+     * @description Animation to react on non-double click
+     * @param {Object} tile to animate
+     */
     bombAnimation(bomb) {
       const shrinking = new cc.ScaleTo(CONFIG.stdAnimationTime, 0.8);
       const expanding = new cc.ScaleTo(CONFIG.stdAnimationTime, 1);
