@@ -105,31 +105,6 @@ class FieldModel{
     return validArr;
   }
 
-  whichTilesNeedMove() {
-    const tilesToMove = [];
-
-    for (let i = 1; i < CONFIG.maxRows; i++) {
-      for (let j = 0; j < CONFIG.maxCols; j++) {
-        if (this.tilesSpr[i][j] !== null) {
-          let emptySpace = 0;
-          for (let m = i - 1; m >= 0; m--) {
-            if (this.tilesSpr[m][j] === null) {
-              emptySpace++ ;
-            }
-          }
-          if (emptySpace > 0) {
-            tilesToMove.push({ tile: this.tilesSpr[i][j], emptySpace });
-
-            this.tilesSpr[i - emptySpace][j] = this.tilesSpr[i][j];
-            this.tilesSpr[i - emptySpace][j].rowIndex = i - emptySpace;
-            this.tilesSpr[i][j] = null;
-          }
-        }
-      }
-    }
-    return tilesToMove;
-  }
-
   whichTilesNeedMove(arr) {
     const nulls = this.removeDuplicateCols(arr, "colIndex");
     const movingTiles = this.tilesToMove(nulls);
