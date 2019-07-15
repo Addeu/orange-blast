@@ -108,8 +108,8 @@ const MainField = cc.Sprite.extend({
     /**
      * @description Moves remaining tiles down to fill in empty spaces
      */
-    tilesSlideDown() {
-      const tilesToMove = this.fieldLogic.whichTilesNeedMove();
+    tilesSlideDown(arr) {
+      const tilesToMove = this.fieldLogic.whichTilesNeedMove(arr);
 
       tilesToMove.forEach(movingTile => {
         const tile = movingTile.tile;

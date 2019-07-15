@@ -43,9 +43,9 @@ const MainLayer = cc.Layer.extend({
     },
 
     /**
-    * @description Checks if the pick is valid and
-    * whether it was single or double click
-    */
+     * @description Checks if the pick is valid and
+     * whether it was single or double click
+     */
     clickCheck(touch, event) {
       const target = event.getCurrentTarget();
       const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
@@ -65,6 +65,9 @@ const MainLayer = cc.Layer.extend({
 
     },
 
+    /**
+     * @return {boolean}
+     */
     checkDouble() {
       this.timeStart = this.timeEnd;
       this.timeEnd = Date.now();
@@ -72,14 +75,22 @@ const MainLayer = cc.Layer.extend({
       return deltaTime <= this.timeActivate;
     },
 
+    /**
+     * @description activates bomb
+     * @param {Object} target tile
+     */
     onDouble(tile) {
         if(tile.isBomb) {
           const blastRadius = this.field.fieldLogic.bombBlast(tile);
           this.field.destroyTiles(blastRadius);
-          this.makeTurn(blastRadius.length);
+          this.makeTurn(blastRadius);
        }
     },
 
+    /**
+     * @description selects a tile and perform actions
+     * @param {Object} target tile
+     */
     onClick(tile) {
         if(tile.isBomb) {
           this.field.bombAnimation(tile);
@@ -92,24 +103,24 @@ const MainLayer = cc.Layer.extend({
             this.field.assembleBomb(arrOfTiles, tile);
             this.makeTurn(arrOfTiles);
           } else {
-          this.field.destroyTiles(arrOfTiles);
-          this.makeTurn(arrOfTiles.length);
+             const delay= cc.delayTime(0.4);
+             const destroy = new cc.CallFunc(() => this.field.destroyTiles(arrOfTiles));
+             const turn = new cc.CallFunc(() => this.makeTurn(arrOfTiles));
+             const seq = new cc.Sequence(destroy, delay, turn);
+             this.runAction(seq);
           }
        }
      }
     },
 
     /**
-    * @description Performs main mechanics:
-    * 1. calls function to destroy tiles
-    * 2. calls gamefield update
-    * 3. calls score and turns update
-    * @param {Array} of similar tiles from this.onClick
-    */
-    makeTurn(number) {
-      this.field.tilesSlideDown();
+     * @description Performs main mechanics
+     * @param {Array} of similar tiles
+     */
+    makeTurn(arr) {
+      this.field.tilesSlideDown(arr);
       this.field.refillTiles();
-      this.gameInfo.updateScore(number);
+      this.gameInfo.updateScore(arr.length);
       this.gameInfo.updateTurns();
       this.gameInfo.isOver();
   }

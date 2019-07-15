@@ -1,7 +1,7 @@
 const CONFIG = {
   maxRows : 9, //rows on the gamefield
   maxCols : 9, //columns on the gamefield
-  stdAnimationTime : 0.3, //in seconds
+  stdAnimationTime : 0.4, //in seconds
   tileSize : 50,      //tiles are squares
   tileHalf: 25,
   topMostIndex : 99, //zIndex to display above other sprites
