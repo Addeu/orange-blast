@@ -1,11 +1,7 @@
-/*
-Main scene of the game.
-will show:
-1. Current score
-2. Turns left
-3. Gamefield with tiles
-4. Button to restart the game
-*/
+/**
+ * @class Main scene of the game.
+ * @extends cc.Scene
+ */
 const GameScene = cc.Scene.extend({
     ctor() {
       this._super();

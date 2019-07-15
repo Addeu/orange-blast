@@ -1,11 +1,8 @@
-/*
-First scene of the game.
-Used as Outro as well
-will show:
-1. Last score (if any)
-2. Best score (if any)
-3. Button to start the game
-*/
+/**
+ * @class First scene of the game.
+ * Used as Outro as well
+ * @extends cc.Scene
+ */
 const IntroScene = cc.Scene.extend({
     ctor(result = "Orange BLAST!!!") {
       this._super();

@@ -1,3 +1,7 @@
+/**
+ * @class represents model for game tile
+ * @extends cc.Sprite
+ */
 const Tile = cc.Sprite.extend({
 
   ctor(type, row, col) {

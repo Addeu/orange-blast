@@ -1,3 +1,6 @@
+/**
+ * @class represents field logic
+ */
 class FieldModel{
 
   constructor() {
@@ -6,7 +9,7 @@ class FieldModel{
   }
 
   /**
-   * @description Creates 2d array
+   * Creates 2d array
    * @param {number} desired number of rows
    * @param {number} desired number of columns
    * @param {number || string || Object || null} set default value for the array
@@ -24,7 +27,7 @@ class FieldModel{
   }
 
   /**
-   * @description Checks if the tile is on the field and not null
+   * Checks if the tile is on the field and not null
    * @param {Object} tile to check
    * @return {boolean} true if exists
    */
@@ -33,7 +36,7 @@ class FieldModel{
   }
 
   /**
-   * @description Collect all tiles of similar colour to one array
+   * Collect all tiles of similar colour to one array
    * @param {Object} Picked tile from MainLayer
    * @return {Array} of similar tiles
    */
@@ -58,7 +61,7 @@ class FieldModel{
   }
 
   /**
-   * @description Check neighbouring tiles for similar colour
+   * Check neighbouring tiles for similar colour
    * @param {Object} Picked tile
    * @return {Array} of similar neighbouring tiles
    */
@@ -79,7 +82,7 @@ class FieldModel{
   }
 
   /**
-   * @description Collects tiles to delete after bomb activation
+   * Collects tiles to delete after bomb activation
    * @param {Object} Bomb tile
    * @return {Array} tiles to be deleted
    */
@@ -95,7 +98,8 @@ class FieldModel{
   }
 
   /**
-   * @description checks if tile is within the filed and binds it to tile sprite
+   * @private
+   * checks if tile is within the filed and binds it to tile sprite
    * @param {Array} tile positions to check
    * @return {Array} of valid tiles
    */
@@ -105,18 +109,36 @@ class FieldModel{
     return validArr;
   }
 
+  /**
+   * @public
+   * @param {Array}
+   * @return {Array}
+   */
   whichTilesNeedMove(arr) {
     const nulls = this.removeDuplicateCols(arr, "colIndex");
     const movingTiles = this.tilesToMove(nulls);
     return movingTiles;
   }
 
+
+  /**
+   * @private
+   * @param {Array}
+   * @param {String} Object property to be filtered
+   * @return {Array}
+   */
   removeDuplicateCols(testArr, prop) {
     return testArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
   }
 
+
+  /**
+   * @private
+   * @param {Array}
+   * @return {Array}
+   */
   tilesToMove(arr) {
     const returnArr = [];
     arr.forEach(tile => {

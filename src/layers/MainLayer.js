@@ -43,7 +43,7 @@ const MainLayer = cc.Layer.extend({
     },
 
     /**
-     * @description Checks if the pick is valid and
+     * Checks if the pick is valid and
      * whether it was single or double click
      */
     clickCheck(touch, event) {
@@ -76,7 +76,7 @@ const MainLayer = cc.Layer.extend({
     },
 
     /**
-     * @description activates bomb
+     * activates bomb
      * @param {Object} target tile
      */
     onDouble(tile) {
@@ -88,7 +88,7 @@ const MainLayer = cc.Layer.extend({
     },
 
     /**
-     * @description selects a tile and perform actions
+     * selects a tile and perform actions
      * @param {Object} target tile
      */
     onClick(tile) {
@@ -114,7 +114,7 @@ const MainLayer = cc.Layer.extend({
     },
 
     /**
-     * @description Performs main mechanics
+     * Performs main mechanics
      * @param {Array} of similar tiles
      */
     makeTurn(arr) {

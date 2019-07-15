@@ -1,7 +1,7 @@
-/*
-Keeps and gives the score
-Uses Local Storage as DB
-*/
+/**
+ * @class Keeps and gives the score
+ * Uses Local Storage as DB
+ */
 class Storage {
 
     constructor() {
@@ -24,8 +24,8 @@ class Storage {
     }
 
     /**
-    @param {Number} Recieves number from GameInfo module
-    */
+     * @param {Number} Recieves number from GameInfo module
+     */
     setLastScore(score) {
       this.lastScore = score;
 

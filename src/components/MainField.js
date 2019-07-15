@@ -1,13 +1,7 @@
-/*
-Is used on MainScene
-
-responsible for:
-1. creating the Gamefield
-2. creating and positioning tiles
-3. Cheking picked tiles
-4. Revoming deleted tiles
-5. Updating and refilling the gamefield
-*/
+/**
+ * @class represents gamefield
+ * @extends cc.Sprite
+ */
 const MainField = cc.Sprite.extend({
 
     ctor() {
@@ -21,21 +15,20 @@ const MainField = cc.Sprite.extend({
       this.runAction(cc.CallFunc.create(this.initMatrix.bind(this)));
     },
 
-    initMatrix() {
-      const baseX = 38;  //coords from which
-      const baseY = 38; //the matrix starts
 
+
+    initMatrix() {
       //Assignment of position on the matrix
       for(let row = 0; row < CONFIG.maxRows; row++) {
         for(let col = 0; col < CONFIG.maxRows; col++) {
-          this.fieldLogic.tilesPos[row][col] = cc.p(baseX + col*CONFIG.tileSize, baseY + row * CONFIG.tileSize);
+          this.fieldLogic.tilesPos[row][col] = cc.p(CONFIG.base + col*CONFIG.tileSize, CONFIG.base + row * CONFIG.tileSize);
           this.addOneTile(row, col);
         }
       }
     },
 
     /**
-     * @description Matches location with tile
+     * Matches touch location with tile
      * @params {Object} location {x, y}
      * @return {Object} tile sprite
      */
@@ -51,7 +44,7 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-     * @description Add a tile sprite to the field
+     * Add a tile sprite to the field
      * @param {number} a row to place the tile
      * @param {number} a column to place the tile
      */
@@ -69,7 +62,7 @@ const MainField = cc.Sprite.extend({
 
 
     /**
-     * @description Animates and deletes tiles that make a bomb
+     * Animates and deletes tiles that make a bomb
      * @param {Array} of tiles to make a bomb
      * @param {Object} a root tile for the bomb
      */
@@ -89,7 +82,7 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-     * @description Provides animation and removes tiles
+     * Provides animation and removes tiles
      * marked for deletion
      * @param {Array} of marked tiles for deletion
      */
@@ -106,7 +99,7 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-     * @description Moves remaining tiles down to fill in empty spaces
+     * Moves remaining tiles down to fill in empty spaces
      */
     tilesSlideDown(arr) {
       const tilesToMove = this.fieldLogic.whichTilesNeedMove(arr);
@@ -123,7 +116,7 @@ const MainField = cc.Sprite.extend({
 
 
     /**
-     * @description adds tiles to empty spaces
+     * adds tiles to empty spaces
      * after sliding down and deletion
      */
     refillTiles() {
@@ -137,7 +130,7 @@ const MainField = cc.Sprite.extend({
     },
 
     /**
-     * @description Animation to react on non-double click
+     * Animation to react on non-double click
      * @param {Object} tile to animate
      */
     bombAnimation(bomb) {
