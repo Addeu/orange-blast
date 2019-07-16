@@ -1,7 +1,7 @@
-/*
-Returns Background that is used
-to add background throughout the game
-*/
+/**
+ * @class for game baackground
+ * @extends cc.Layer
+ */
 const Background = cc.Layer.extend({
 
     ctor() {

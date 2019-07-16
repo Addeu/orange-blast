@@ -9,9 +9,9 @@
   class GameInfo{
 
     constructor() {
-      this.turns = 50;
+      this.turns = CONFIG.turns;
       this.score = 0;
-      this.goal = 10000;
+      this.goal = CONFIG.goal;
       this.storage = new Storage;
       this.init();
     }

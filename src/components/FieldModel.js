@@ -10,6 +10,7 @@ class FieldModel{
 
   /**
    * Creates 2d array
+   * @private
    * @param {number} desired number of rows
    * @param {number} desired number of columns
    * @param {number || string || Object || null} set default value for the array
@@ -27,6 +28,7 @@ class FieldModel{
   }
 
   /**
+   * @private
    * Checks if the tile is on the field and not null
    * @param {Object} tile to check
    * @return {boolean} true if exists
@@ -36,6 +38,7 @@ class FieldModel{
   }
 
   /**
+   * @private
    * Collect all tiles of similar colour to one array
    * @param {Object} Picked tile from MainLayer
    * @return {Array} of similar tiles
@@ -61,7 +64,8 @@ class FieldModel{
   }
 
   /**
-   * Check neighbouring tiles for similar colour
+   * @private
+   * Checks neighbouring tiles for similar colour
    * @param {Object} Picked tile
    * @return {Array} of similar neighbouring tiles
    */

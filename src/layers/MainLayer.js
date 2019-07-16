@@ -1,3 +1,7 @@
+/**
+ * Main game layer
+ * @extends cc.Layer
+ */
 const MainLayer = cc.Layer.extend({
     ctor() {
       this._super();
@@ -38,8 +42,12 @@ const MainLayer = cc.Layer.extend({
         swallowTouches: true,
         onTouchBegan: this.clickCheck}, this);
 
+      //Time for double click
       this.timeEnd = 0;
-      this.timeActivate = 300;
+      this.timeActivate = 300; //time interval between two clicks
+
+      //Delay for animation separation
+      this.delay = cc.delayTime(CONFIG.stdAnimationTime);
     },
 
     /**
@@ -82,8 +90,10 @@ const MainLayer = cc.Layer.extend({
     onDouble(tile) {
         if(tile.isBomb) {
           const blastRadius = this.field.fieldLogic.bombBlast(tile);
-          this.field.destroyTiles(blastRadius);
-          this.makeTurn(blastRadius);
+          const destroy = new cc.CallFunc(() => this.field.destroyTiles(blastRadius));
+          const turn = new cc.CallFunc(() => this.makeTurn(blastRadius));
+          const chain = new cc.Sequence(destroy, this.delay, turn);
+          this.runAction(chain);
        }
     },
 
@@ -100,14 +110,16 @@ const MainLayer = cc.Layer.extend({
         if(arrOfTiles != undefined) {
           if(arrOfTiles.length >= CONFIG.tilesForBomb) { //check length for making bomb
             tile.isBomb = true;
-            this.field.assembleBomb(arrOfTiles, tile);
-            this.makeTurn(arrOfTiles);
+            const assemble = new cc.CallFunc(() => this.field.assembleBomb(arrOfTiles, tile));
+            const turn = new cc.CallFunc(() => this.makeTurn(arrOfTiles));
+            const chain = new cc.Sequence(assemble, this.delay, turn);
+            this.runAction(chain)
+
           } else {
-             const delay= cc.delayTime(0.4);
              const destroy = new cc.CallFunc(() => this.field.destroyTiles(arrOfTiles));
              const turn = new cc.CallFunc(() => this.makeTurn(arrOfTiles));
-             const seq = new cc.Sequence(destroy, delay, turn);
-             this.runAction(seq);
+             const chain = new cc.Sequence(destroy, this.delay, turn);
+             this.runAction(chain);
           }
        }
      }

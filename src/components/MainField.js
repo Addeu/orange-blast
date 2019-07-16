@@ -15,10 +15,10 @@ const MainField = cc.Sprite.extend({
       this.runAction(cc.CallFunc.create(this.initMatrix.bind(this)));
     },
 
-
-
+    /**
+     * @private Assogns tile position on the matrix
+     */
     initMatrix() {
-      //Assignment of position on the matrix
       for(let row = 0; row < CONFIG.maxRows; row++) {
         for(let col = 0; col < CONFIG.maxRows; col++) {
           this.fieldLogic.tilesPos[row][col] = cc.p(CONFIG.base + col*CONFIG.tileSize, CONFIG.base + row * CONFIG.tileSize);
@@ -34,10 +34,8 @@ const MainField = cc.Sprite.extend({
      */
     tilePick(location) {
 
-      const ly = Math.floor(location.y - 80);
-      const lx = Math.floor(location.x - CONFIG.fieldBorder);
-      const row =  Math.floor((ly - 80 + CONFIG.tileHalf)/CONFIG.tileSize);
-      const col =  Math.floor((lx - CONFIG.fieldBorder + CONFIG.tileHalf)/CONFIG.tileSize);
+      const row =  Math.floor((Math.floor(location.y - CONFIG.fieldBorderY) - CONFIG.fieldBorderY + CONFIG.tileHalf)/CONFIG.tileSize);
+      const col =  Math.floor((Math.floor(location.x - CONFIG.fieldBorderX) - CONFIG.fieldBorderX + CONFIG.tileHalf)/CONFIG.tileSize);
       const tile = this.fieldLogic.tilesSpr[row][col];
 
       return tile;

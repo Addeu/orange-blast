@@ -1,9 +1,7 @@
-/*
-Returns UI layer that is used in:
-  in IntroScene: starts new game
-  in GameScene: restarts current game with different tiles
-  in OutroScene: launches game again
-*/
+/**
+ * @class creates UI layer
+ * @extends cc.Layer
+ */
 const UILayer = cc.Layer.extend({
 
     ctor() {
