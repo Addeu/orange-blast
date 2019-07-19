@@ -90,14 +90,26 @@ class FieldModel{
    * @param {Object} Bomb tile
    * @return {Array} tiles to be deleted
    */
-  bombBlast(tile) {
+  superBlast(tile) {
     tile.isBomb = false;
-    const radius = [tile];
-      for(let i = tile.rowIndex - CONFIG.blastRadius; i <= tile.rowIndex + CONFIG.blastRadius; i++) {
-        for(let j = tile.colIndex - CONFIG.blastRadius; j <= tile.colIndex + CONFIG.blastRadius; j++) {
-            radius.push({rowIndex: i, colIndex: j});
-        }
-      }
+    let radius = [];
+    switch(tile.extraAttr) {
+      case CONFIG.bombType:
+        radius = this.bombBlast(tile);
+        break;
+
+      case CONFIG.crossie:
+        radius = this.crossieBlast(tile);
+        break;
+
+      case CONFIG.colorDestroy:
+        radius = this.colorDestroyBlast(tile);
+        break;
+
+      default:
+        radius = this.bombBlast(tile);
+    }
+
     return this.validNeighbours(radius);
   }
 
@@ -166,5 +178,54 @@ class FieldModel{
       }
     });
     return returnArr;
+  }
+
+  /**
+   * Collects tiles to delete after bomb activation
+   * @param {Object} Bomb tile
+   * @return {Array} tiles to be deleted
+   */
+  bombBlast(tile) {
+    tile.isBomb = false;
+    const radius = [tile];
+    for(let i = tile.rowIndex - CONFIG.blastRadius; i <= tile.rowIndex + CONFIG.blastRadius; i++) {
+      for(let j = tile.colIndex - CONFIG.blastRadius; j <= tile.colIndex + CONFIG.blastRadius; j++) {
+          radius.push({rowIndex: i, colIndex: j});
+      }
+    }
+    return this.validNeighbours(radius);
+  }
+
+  /**
+   * Collects tiles to delete after bomb activation
+   * @param {Object} Bomb tile
+   * @return {Array} tiles to be deleted
+   */
+  crossieBlast(tile) {
+    tile.isBomb = false;
+    const radius = [];
+      for(let i = 0; i < CONFIG.maxRows; i++) {
+        radius.push({rowIndex: i, colIndex: tile.colIndex});
+        radius.push({rowIndex: tile.rowIndex, colIndex: i});
+      }
+    return this.validNeighbours(radius);
+  }
+
+  /**
+   * Collects tiles to delete after bomb activation
+   * @param {Object} Bomb tile
+   * @return {Array} tiles to be deleted
+   */
+  colorDestroyBlast(tile) {
+    tile.isBomb = false;
+    const radius = [tile];
+    for(let i = 0; i < CONFIG.maxRows; i++) {
+      for(let j = 0; j < CONFIG.maxCols; j++) {
+        if(this.tilesSpr[i][j].extraAttr === tile.resemblance) {
+          radius.push({rowIndex: i, colIndex: j});
+        }
+      }
+    }
+    return this.validNeighbours(radius);
   }
 }

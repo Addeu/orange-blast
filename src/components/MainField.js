@@ -66,8 +66,10 @@ const MainField = cc.Sprite.extend({
      */
     assembleBomb(arr, bomb) {
       bomb.zIndex = CONFIG.topMostIndex;
-      bomb.extraAttr = CONFIG.bombType;
-      bomb.setTexture(res.bombie);
+      bomb.resemblance = bomb.extraAttr;
+      bomb.extraAttr = Math.floor(CONFIG.bombType + Math.random() * (CONFIG.colorDestroy + 1 - CONFIG.bombType));
+      console.log(bomb.extraAttr);
+      bomb.setTexture(this.chooseTexture(bomb));
       arr.forEach(tile => {
         if(!tile.isBomb) {
           const unify = new cc.MoveTo(CONFIG.stdAnimationTime, bomb.x, bomb.y);
@@ -137,5 +139,25 @@ const MainField = cc.Sprite.extend({
       const chain = new cc.Sequence(shrinking, expanding);
       const repeat = new cc.RepeatForever(chain);
       bomb.runAction(repeat);
+    },
+
+    chooseTexture(bomb) {
+      switch(bomb.extraAttr) {
+
+        case CONFIG.bombType:
+           return `res/bombie.png`;
+           break;
+
+        case CONFIG.crossie:
+           return `res/crossie.png`;
+           break;
+
+        case CONFIG.colorDestroy:
+          return `res/${bomb.resemblance}a.png`;
+          break;
+
+        default:
+          return `res/bombie.png`;
     }
+  }
 });

@@ -15,9 +15,11 @@ const CONFIG = {
   fieldBorderY: 80,
   middleX: 240,
   progressBarY: 700,
-  tilesForBomb: 7,
+  tilesForBomb: 6,
   blastRadius: 1,
   bombType: 6,         //Unique type, not corresponding with other tile colours
+  crossie: 7,          //Unique type, for cross-blast
+  colorDestroy: 8,    //Unique type, for descruction of similar-coloured tiles
   bonus: 500,        //for reaching the goal in less than given number of turns
   goal: 10000,
   turns: 50

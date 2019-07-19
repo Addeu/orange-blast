@@ -89,7 +89,7 @@ const MainLayer = cc.Layer.extend({
      */
     onDouble(tile) {
         if(tile.isBomb) {
-          const blastRadius = this.field.fieldLogic.bombBlast(tile);
+          const blastRadius = this.field.fieldLogic.superBlast(tile);
           const destroy = new cc.CallFunc(() => this.field.destroyTiles(blastRadius));
           const turn = new cc.CallFunc(() => this.makeTurn(blastRadius));
           const chain = new cc.Sequence(destroy, this.delay, turn);
