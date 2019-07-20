@@ -50,10 +50,13 @@ const MainField = cc.Sprite.extend({
       const type = Math.floor(Math.random() * 5) + 1;
 
       this.fieldLogic.tilesSpr[row][col] = new Tile(type, row, col);
-      this.fieldLogic.tilesSpr[row][col].setPosition(this.fieldLogic.tilesPos[row][col].x, CONFIG.fieldHeight);
+      this.fieldLogic.tilesSpr[row][col].setPosition(this.fieldLogic.tilesPos[row][col].x, 700);
+      this.fieldLogic.tilesSpr[row][col].setOpacity(0);
 
       const slide = new cc.MoveTo(0.3, this.fieldLogic.tilesPos[row][col].x, this.fieldLogic.tilesPos[row][col].y);
-      this.fieldLogic.tilesSpr[row][col].runAction(slide);
+      const makeVisible = new cc.FadeIn(0.35);
+      const chain = new cc.Spawn(slide, makeVisible);
+      this.fieldLogic.tilesSpr[row][col].runAction(chain);
       this.addChild(this.fieldLogic.tilesSpr[row][col]);
 
     },
@@ -68,7 +71,6 @@ const MainField = cc.Sprite.extend({
       bomb.zIndex = CONFIG.topMostIndex;
       bomb.resemblance = bomb.extraAttr;
       bomb.extraAttr = Math.floor(CONFIG.bombType + Math.random() * (CONFIG.colorDestroy + 1 - CONFIG.bombType));
-      console.log(bomb.extraAttr);
       bomb.setTexture(this.chooseTexture(bomb));
       arr.forEach(tile => {
         if(!tile.isBomb) {
