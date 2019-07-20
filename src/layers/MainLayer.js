@@ -88,7 +88,7 @@ const MainLayer = cc.Layer.extend({
      * @param {Object} target tile
      */
     onDouble(tile) {
-        if(tile.isBomb) {
+        if(tile.isSuperTile) {
           const blastRadius = this.field.fieldLogic.superBlast(tile);
           const destroy = new cc.CallFunc(() => this.field.destroyTiles(blastRadius));
           const turn = new cc.CallFunc(() => this.makeTurn(blastRadius));
@@ -102,15 +102,15 @@ const MainLayer = cc.Layer.extend({
      * @param {Object} target tile
      */
     onClick(tile) {
-        if(tile.isBomb) {
-          this.field.bombAnimation(tile);
+        if(tile.isSuperTile) {
+          this.field.superTileAnimation(tile);
         } else {
         //return array of tiles similar in colour
         const arrOfTiles = this.field.fieldLogic.findTiles(tile);
         if(arrOfTiles != undefined) {
           if(arrOfTiles.length >= CONFIG.tilesForBomb) { //check length for making bomb
-            tile.isBomb = true;
-            const assemble = new cc.CallFunc(() => this.field.assembleBomb(arrOfTiles, tile));
+            tile.isSuperTile = true;
+            const assemble = new cc.CallFunc(() => this.field.assembleSuperTile(arrOfTiles, tile));
             const turn = new cc.CallFunc(() => this.makeTurn(arrOfTiles));
             const chain = new cc.Sequence(assemble, this.delay, turn);
             this.runAction(chain)

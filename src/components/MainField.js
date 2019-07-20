@@ -50,31 +50,28 @@ const MainField = cc.Sprite.extend({
       const type = Math.floor(Math.random() * 5) + 1;
 
       this.fieldLogic.tilesSpr[row][col] = new Tile(type, row, col);
-      this.fieldLogic.tilesSpr[row][col].setPosition(this.fieldLogic.tilesPos[row][col].x, 700);
+      this.fieldLogic.tilesSpr[row][col].setPosition(this.fieldLogic.tilesPos[row][col].x, 740);
       this.fieldLogic.tilesSpr[row][col].setOpacity(0);
-
-      const slide = new cc.MoveTo(0.3, this.fieldLogic.tilesPos[row][col].x, this.fieldLogic.tilesPos[row][col].y);
-      const makeVisible = new cc.FadeIn(0.35);
-      const chain = new cc.Spawn(slide, makeVisible);
-      this.fieldLogic.tilesSpr[row][col].runAction(chain);
+;
+      this.fieldLogic.tilesSpr[row][col].runAction(this.tileAnimation(this.fieldLogic.tilesPos[row][col].x, this.fieldLogic.tilesPos[row][col].y));
       this.addChild(this.fieldLogic.tilesSpr[row][col]);
 
     },
 
 
     /**
-     * Animates and deletes tiles that make a bomb
-     * @param {Array} of tiles to make a bomb
-     * @param {Object} a root tile for the bomb
+     * Animates and deletes tiles that make a superTile
+     * @param {Array} of tiles to make a superTile
+     * @param {Object} a root tile for the superTile
      */
-    assembleBomb(arr, bomb) {
-      bomb.zIndex = CONFIG.topMostIndex;
-      bomb.resemblance = bomb.extraAttr;
-      bomb.extraAttr = Math.floor(CONFIG.bombType + Math.random() * (CONFIG.colorDestroy + 1 - CONFIG.bombType));
-      bomb.setTexture(this.chooseTexture(bomb));
+    assembleSuperTile(arr, superTile) {
+      superTile.zIndex = CONFIG.topMostIndex;
+      superTile.resemblance = superTile.extraAttr;
+      superTile.extraAttr = Math.floor(CONFIG.bombType + Math.random() * (CONFIG.colorDestroy + 1 - CONFIG.bombType));
+      superTile.setTexture(this.chooseTexture(superTile));
       arr.forEach(tile => {
-        if(!tile.isBomb) {
-          const unify = new cc.MoveTo(CONFIG.stdAnimationTime, bomb.x, bomb.y);
+        if(!tile.isSuperTile) {
+          const unify = new cc.MoveTo(CONFIG.stdAnimationTime, superTile.x, superTile.y);
           const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
           const chain = new cc.Sequence(unify, deletion);
           tile.runAction(chain);
@@ -135,16 +132,16 @@ const MainField = cc.Sprite.extend({
      * Animation to react on non-double click
      * @param {Object} tile to animate
      */
-    bombAnimation(bomb) {
+    superTileAnimation(superTile) {
       const shrinking = new cc.ScaleTo(CONFIG.stdAnimationTime, 0.8);
       const expanding = new cc.ScaleTo(CONFIG.stdAnimationTime, 1);
       const chain = new cc.Sequence(shrinking, expanding);
       const repeat = new cc.RepeatForever(chain);
-      bomb.runAction(repeat);
+      superTile.runAction(repeat);
     },
 
-    chooseTexture(bomb) {
-      switch(bomb.extraAttr) {
+    chooseTexture(superTile) {
+      switch(superTile.extraAttr) {
 
         case CONFIG.bombType:
            return `res/bombie.png`;
@@ -155,11 +152,21 @@ const MainField = cc.Sprite.extend({
            break;
 
         case CONFIG.colorDestroy:
-          return `res/${bomb.resemblance}a.png`;
+          return `res/${superTile.resemblance}a.png`;
           break;
 
         default:
           return `res/bombie.png`;
     }
+  },
+
+  tileAnimation(locX, locY) {
+    const slide = new cc.MoveTo(CONFIG.stdAnimationTime, locX, locY);
+    const delay = cc.delayTime((CONFIG.stdAnimationTime / 3) * 2); //to keep tile invisible for 2/3 of its way down
+    const makeVisible = new cc.FadeIn(CONFIG.stdAnimationTime / 3);
+    const chain = new cc.Sequence(delay, makeVisible);
+    const spawn = new cc.Spawn(slide, chain);
+
+    return spawn;
   }
 });

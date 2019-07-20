@@ -87,7 +87,7 @@ class FieldModel{
    * @return {Array} tiles to be deleted
    */
   superBlast(tile) {
-    tile.isBomb = false;
+    tile.isSuperTile = false;
     let radius = [];
     switch(tile.extraAttr) {
       case CONFIG.bombType:
@@ -182,7 +182,7 @@ class FieldModel{
    * @return {Array} tiles to be deleted
    */
   bombBlast(tile) {
-    tile.isBomb = false;
+    tile.isSuperTile = false;
     const radius = [tile];
     for(let i = tile.rowIndex - CONFIG.blastRadius; i <= tile.rowIndex + CONFIG.blastRadius; i++) {
       for(let j = tile.colIndex - CONFIG.blastRadius; j <= tile.colIndex + CONFIG.blastRadius; j++) {
@@ -198,7 +198,7 @@ class FieldModel{
    * @return {Array} tiles to be deleted
    */
   crossieBlast(tile) {
-    tile.isBomb = false;
+    tile.isSuperTile = false;
     const radius = [];
       for(let i = 0; i < CONFIG.maxRows; i++) {
         radius.push({rowIndex: i, colIndex: tile.colIndex});
@@ -213,7 +213,7 @@ class FieldModel{
    * @return {Array} tiles to be deleted
    */
   colorDestroyBlast(tile) {
-    tile.isBomb = false;
+    tile.isSuperTile = false;
     const radius = [tile];
     for(let i = 0; i < CONFIG.maxRows; i++) {
       for(let j = 0; j < CONFIG.maxCols; j++) {

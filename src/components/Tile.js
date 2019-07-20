@@ -13,7 +13,7 @@ const Tile = cc.Sprite.extend({
     this.rowIndex = row;
     this.colIndex = col;
     this.extraAttr = type;
-    this.isBomb = false;
+    this.isSuperTile = false;
     this.setAnchorPoint(0.5, 0.5);
   }
 });
