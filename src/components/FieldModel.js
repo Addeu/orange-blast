@@ -49,7 +49,7 @@ class FieldModel{
     const returnArr = [];
     while(!stack.isEmpty()) {
       const subject = stack.pop();
-      this.checkForColor(subject).forEach(el => stack.push(el);
+      this.checkForColor(subject).forEach(el => stack.push(el));
       returnArr.push(subject);
     }
     if(returnArr.length > 1) {
