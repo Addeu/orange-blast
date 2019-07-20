@@ -44,22 +44,18 @@ class FieldModel{
    * @return {Array} of similar tiles
    */
   findTiles(tile) {
-    const neighbours = this.checkForColor(tile);
-    if(neighbours.length > 0) {
-      const returnArr = [tile];
-      while(neighbours.length > 0) {
-        for(let i = 0; i < neighbours.length; i++) {
-          const tilesToCheck = this.checkForColor(neighbours[i]);
-          const neighboursFiltered = tilesToCheck.filter(element => !neighbours.includes(element));
-          neighbours.push(...neighboursFiltered);
-          returnArr.push(...neighbours.splice(i, 1));
-        }
-      }
-      if(returnArr.length > 1) {
-        return returnArr;
-      } else {
-        tile.isPicked = false;
-      }
+    const stack = new Stack;
+    stack.push(tile);
+    const returnArr = [];
+    while(!stack.isEmpty()) {
+      const subject = stack.pop();
+      this.checkForColor(subject).forEach(el => stack.push(el);
+      returnArr.push(subject);
+    }
+    if(returnArr.length > 1) {
+      return returnArr;
+    } else {
+      tile.isPicked = false;
     }
   }
 
