@@ -108,7 +108,7 @@ const MainLayer = cc.Layer.extend({
         //return array of tiles similar in colour
         const arrOfTiles = this.field.fieldLogic.findTiles(tile);
         if(arrOfTiles != undefined) {
-          if(arrOfTiles.length >= CONFIG.tilesForBomb) { //check length for making bomb
+          if(arrOfTiles.length >= CONFIG.tilesForSuperTile) { //check length for making bomb
             tile.isSuperTile = true;
             const assemble = new cc.CallFunc(() => this.field.assembleSuperTile(arrOfTiles, tile));
             const turn = new cc.CallFunc(() => this.makeTurn(arrOfTiles));

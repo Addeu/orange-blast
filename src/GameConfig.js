@@ -15,7 +15,7 @@ const CONFIG = {
   fieldBorderY: 80,
   middleX: 240,
   progressBarY: 700,
-  tilesForBomb: 6,
+  tilesForSuperTile: 6,
   blastRadius: 1,
   bombType: 6,         //Unique type, not corresponding with other tile colours
   crossie: 7,          //Unique type, for cross-blast
