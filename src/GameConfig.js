@@ -11,7 +11,7 @@ const CONFIG = {
   fieldHeight : 450,       //without graphical border
   fieldX: 10,
   fieldY: 135,
-  fieldBorderX: 15,
+  fieldBorderX: 20,
   fieldBorderY: 80,
   middleX: 240,
   progressBarY: 700,

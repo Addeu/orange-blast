@@ -58,19 +58,18 @@ const MainLayer = cc.Layer.extend({
       const target = event.getCurrentTarget();
       const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
       const location = touch.getLocation();
-      let tile = null;
+      console.log(location);
 
       //Pick up necessary tile
       if(cc.rectContainsPoint(fieldRect, location)) {
-        tile = target.field.tilePick(location);
+        let tile = target.field.tilePick(location);
+
+        if(target.checkDouble()) {
+          target.onDouble(tile);
+        } else {
+          target.onClick(tile);
+        }
       };
-
-      if(target.checkDouble()) {
-        target.onDouble(tile);
-      } else {
-        target.onClick(tile);
-      }
-
     },
 
     /**
