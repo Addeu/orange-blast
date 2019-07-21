@@ -37,6 +37,8 @@
      * @param {number} Array.length of tiles to delete from MainLayer
      */
     updateScore(number) {
+      let lastScore = this.score;
+
       if(number <= 3) {
         this.score += number * 20;
       }
@@ -47,7 +49,7 @@
         this.score += number * 40;
       }
       //change Score label content
-      this.scoreLabel.setString(`${this.score} out of ${this.goal}`);
+      this.animateScore(lastScore);
 
       //change ProgressBar filling
       const fillScale = cc.progressTo(CONFIG.stdAnimationTime, this.score/this.goal * 100);
@@ -76,6 +78,20 @@
         this.score += this.turns * CONFIG.bonus;
         this.storage.setLastScore(this.score);
         cc.director.runScene(new cc.TransitionSlideInR(CONFIG.stdAnimationTime, new IntroScene("You won!!")));
+      }
+    }
+
+    animateScore(lastScore) {
+
+      let delta = (this.score - lastScore) / 10;
+      while(delta > 0) {
+        
+        const upScore = new cc.CallFunc(() => {
+          lastScore += 10;
+          this.scoreLabel.setString(`${lastScore} out of ${this.goal}`)});
+
+        this.scoreLabel.runAction(upScore);
+        delta--
       }
     }
 }
