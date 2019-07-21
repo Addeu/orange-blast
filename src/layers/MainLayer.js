@@ -63,9 +63,9 @@ const MainLayer = cc.Layer.extend({
       if(cc.rectContainsPoint(fieldRect, location)) {
         let tile = target.field.tilePick(location);
 
-        if(target.checkDouble()) {
+        if(tile !== undefined && target.checkDouble()) {
           target.onDouble(tile);
-        } else {
+        } else if(tile !== undefined) {
           target.onClick(tile);
         }
       };

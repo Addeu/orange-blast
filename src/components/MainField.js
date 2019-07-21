@@ -36,9 +36,10 @@ const MainField = cc.Sprite.extend({
 
       const row =  Math.floor((Math.floor(location.y - CONFIG.fieldBorderY) - CONFIG.fieldBorderY + CONFIG.tileHalf)/CONFIG.tileSize);
       const col =  Math.floor((Math.floor(location.x - CONFIG.fieldBorderX) - CONFIG.fieldBorderX + CONFIG.tileHalf)/CONFIG.tileSize);
-      const tile = this.fieldLogic.tilesSpr[row][col];
-
-      return tile;
+      if(this.fieldLogic.tilesSpr[row][col] !== null) {
+        const tile = this.fieldLogic.tilesSpr[row][col];
+        return tile;
+      }
     },
 
     /**

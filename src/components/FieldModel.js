@@ -34,7 +34,9 @@ class FieldModel{
    * @return {boolean} true if exists
    */
   tileExists(tile) {
+    if(tile != null) {
     return tile.rowIndex >= 0 && tile.rowIndex < CONFIG.maxRows && tile.colIndex >= 0 && tile.colIndex < CONFIG.maxCols && tile != null;
+   }
   }
 
   /**
@@ -208,7 +210,7 @@ class FieldModel{
     const radius = [tile];
     for(let i = 0; i < CONFIG.maxRows; i++) {
       for(let j = 0; j < CONFIG.maxCols; j++) {
-        if(this.tilesSpr[i][j].extraAttr === tile.resemblance) {
+        if(this.tilesSpr[i][j] !== null && this.tilesSpr[i][j].extraAttr === tile.resemblance) {
           radius.push({rowIndex: i, colIndex: j});
         }
       }
