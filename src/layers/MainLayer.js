@@ -63,9 +63,9 @@ const MainLayer = cc.Layer.extend({
       if(cc.rectContainsPoint(fieldRect, location)) {
         let tile = target.field.tilePick(location);
 
-        if(target.checkDouble() && tile !== null) {
+        if(target.checkDouble()) {
           target.onDouble(tile);
-        } else if (tile !== null){
+        } else {
           target.onClick(tile);
         }
       };
@@ -82,12 +82,18 @@ const MainLayer = cc.Layer.extend({
     },
 
     /**
-     * activates bomb
+     * activates super tile
      * @param {Object} target tile
      */
     onDouble(tile) {
-        if(tile.isSuperTile) {
-          const blastRadius = this.field.fieldLogic.superBlast(tile);
+        if(tile.isSuperTile && tile !== null) {
+          let blastRadius = this.field.fieldLogic.superBlast(tile);
+          const cascade = blastRadius.filter(element => element.isSuperTile);
+          if(cascade.length > 0) {
+            cascade.forEach(superTile => {
+              blastRadius = (blastRadius.concat(this.field.fieldLogic.superBlast(superTile)));
+            });
+          }
           const destroy = new cc.CallFunc(() => this.field.destroyTiles(blastRadius));
           const turn = new cc.CallFunc(() => this.makeTurn(blastRadius));
           const chain = new cc.Sequence(destroy, this.delay, turn);
