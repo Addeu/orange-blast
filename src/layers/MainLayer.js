@@ -58,15 +58,14 @@ const MainLayer = cc.Layer.extend({
       const target = event.getCurrentTarget();
       const fieldRect = cc.rect(CONFIG.fieldX, CONFIG.fieldY, CONFIG.fieldWidth, CONFIG.fieldHeight);
       const location = touch.getLocation();
-      console.log(location);
 
       //Pick up necessary tile
       if(cc.rectContainsPoint(fieldRect, location)) {
         let tile = target.field.tilePick(location);
 
-        if(target.checkDouble()) {
+        if(target.checkDouble() && tile !== null) {
           target.onDouble(tile);
-        } else {
+        } else if (tile !== null){
           target.onClick(tile);
         }
       };
@@ -129,7 +128,7 @@ const MainLayer = cc.Layer.extend({
      * @param {Array} of similar tiles
      */
     makeTurn(arr) {
-      this.field.tilesSlideDown(arr);
+      this.field.tilesSlideDown();
       this.field.refillTiles();
       this.gameInfo.updateScore(arr.length);
       this.gameInfo.updateTurns();

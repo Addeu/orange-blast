@@ -122,62 +122,56 @@ class FieldModel{
   }
 
   /**
-   * @public
-   * @param {Array}
-   * @return {Array}
+   * Find tiles that have holes below
+   * @return {Array} of tiles and empty space
    */
-  whichTilesNeedMove(arr) {
-    const nulls = this.removeDuplicateCols(arr, "colIndex");
-    const movingTiles = this.tilesToMove(nulls);
-    return movingTiles;
-  }
-
-
-  /**
-   * @private
-   * @param {Array}
-   * @param {String} Object property to be filtered
-   * @return {Array}
-   */
-  removeDuplicateCols(testArr, prop) {
-    return testArr.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-    });
-  }
-
-
-  /**
-   * @private
-   * @param {Array}
-   * @return {Array}
-   */
-  tilesToMove(arr) {
+  whichTilesNeedMove() {
     const returnArr = [];
-    arr.forEach(tile => {
-      let col = tile.colIndex;
-      for (let i = 1; i < CONFIG.maxRows; i++) {
-        if (this.tilesSpr[i][col] !== null) {
-          let emptySpace = 0;
-          for (let m = i - 1; m >= 0; m--) {
-            if (this.tilesSpr[m][col] === null) {
-              emptySpace++ ;
-            }
-          }
-          if (emptySpace > 0) {
-            returnArr.push({ tile: this.tilesSpr[i][col], emptySpace });
-
-            this.tilesSpr[i - emptySpace][col] = this.tilesSpr[i][col];
-            this.tilesSpr[i - emptySpace][col].rowIndex = i - emptySpace;
-            this.tilesSpr[i][col] = null;
+    for(let i = 1; i < CONFIG.maxRows; i++) {
+      for(let j = 0; j < CONFIG.maxCols; j++) {
+        if(this.tilesSpr[i][j] !== null) {
+          const emptySpace = this.findEmptySpace(i, j);
+          if(emptySpace > 0) {
+            returnArr.push({tile: this.tilesSpr[i][j], emptySpace});
+            this.swapTiles(i, j, i - emptySpace);
           }
         }
       }
-    });
-    return returnArr;
+    }
+   return returnArr;
   }
 
   /**
-   * Collects tiles to delete after bomb activation
+   * find empty space ander a tile
+   * @private
+   * @param {number} row index
+   * @param {numver} column index
+   */
+  findEmptySpace(row, col) {
+    let emptySpace = 0;
+      for(let i = row - 1; i >= 0; i--) {
+        if(this.tilesSpr[i][col] === null) {
+          emptySpace++ ;
+        }
+      }
+    return emptySpace;
+  }
+
+  /**
+   * Moves upper tile to lower position
+   * @private
+   * @param {number} upper row index
+   * @param {number} column index
+   * @param {number} lower row index
+   */
+  swapTiles(row, col, row2) {
+    this.tilesSpr[row2][col] = this.tilesSpr[row][col];
+    this.tilesSpr[row2][col].rowIndex = row2;
+    this.tilesSpr[row][col] = null;
+  }
+
+  /**
+   * Collects tiles to delete after bomb super tile activation
    * @param {Object} Bomb tile
    * @return {Array} tiles to be deleted
    */
@@ -193,8 +187,8 @@ class FieldModel{
   }
 
   /**
-   * Collects tiles to delete after bomb activation
-   * @param {Object} Bomb tile
+   * Collects tiles to delete after cross super tile activation
+   * @param {Object} Cross tile
    * @return {Array} tiles to be deleted
    */
   crossieBlast(tile) {
@@ -208,8 +202,8 @@ class FieldModel{
   }
 
   /**
-   * Collects tiles to delete after bomb activation
-   * @param {Object} Bomb tile
+   * Collects tiles to delete after Color Destroy super tile activation
+   * @param {Object} super tile
    * @return {Array} tiles to be deleted
    */
   colorDestroyBlast(tile) {
