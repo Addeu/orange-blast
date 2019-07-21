@@ -86,7 +86,7 @@ const MainLayer = cc.Layer.extend({
      * @param {Object} target tile
      */
     onDouble(tile) {
-        if(tile.isSuperTile && tile !== null) {
+        if(tile.isSuperTile) {
           let blastRadius = this.field.fieldLogic.superBlast(tile);
           const cascade = blastRadius.filter(element => element.isSuperTile);
           if(cascade.length > 0) {
