@@ -81,11 +81,17 @@
       }
     }
 
+    /**
+     * Animation for gradual score upsate
+     * @private
+     * @params {number} last score
+     */
+
     animateScore(lastScore) {
 
       let delta = (this.score - lastScore) / 10;
       while(delta > 0) {
-        
+
         const upScore = new cc.CallFunc(() => {
           lastScore += 10;
           this.scoreLabel.setString(`${lastScore} out of ${this.goal}`)});

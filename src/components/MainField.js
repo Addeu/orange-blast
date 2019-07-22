@@ -69,7 +69,7 @@ const MainField = cc.Sprite.extend({
       superTile.zIndex = CONFIG.topMostIndex;
       superTile.resemblance = superTile.extraAttr;
       superTile.extraAttr = Math.floor(CONFIG.bombType + Math.random() * (CONFIG.colorDestroy + 1 - CONFIG.bombType));
-      superTile.setTexture(this.chooseTexture(superTile));
+      superTile.setTexture(this.chooseTexture(superTile.extraAttr));
       arr.forEach(tile => {
         if(!tile.isSuperTile) {
           const unify = new cc.MoveTo(CONFIG.stdAnimationTime, superTile.x, superTile.y);
@@ -141,8 +141,15 @@ const MainField = cc.Sprite.extend({
       superTile.runAction(repeat);
     },
 
+    /**
+     * Setting up texture for super tile
+     * @private
+     * @param {number} super tile type
+     * @return {string} texture file name
+     */
+
     chooseTexture(superTile) {
-      switch(superTile.extraAttr) {
+      switch(superTile) {
 
         case CONFIG.bombType:
            return `res/bombie.png`;
@@ -160,6 +167,14 @@ const MainField = cc.Sprite.extend({
           return `res/bombie.png`;
     }
   },
+
+  /**
+   * Animation for refilling tiles
+   * @private
+   * @param {number} X position
+   * @param {number} y position
+   * @return {Object} animation sequence 
+   */
 
   tileAnimation(locX, locY) {
     const slide = new cc.MoveTo(CONFIG.stdAnimationTime, locX, locY);
