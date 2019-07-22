@@ -69,7 +69,7 @@ const MainField = cc.Sprite.extend({
       superTile.zIndex = CONFIG.topMostIndex;
       superTile.resemblance = superTile.extraAttr;
       superTile.extraAttr = Math.floor(CONFIG.bombType + Math.random() * (CONFIG.colorDestroy + 1 - CONFIG.bombType));
-      superTile.setTexture(this.chooseTexture(superTile.extraAttr));
+      superTile.setTexture(this.chooseTexture(superTile));
       arr.forEach(tile => {
         if(!tile.isSuperTile) {
           const unify = new cc.MoveTo(CONFIG.stdAnimationTime, superTile.x, superTile.y);
@@ -149,7 +149,7 @@ const MainField = cc.Sprite.extend({
      */
 
     chooseTexture(superTile) {
-      switch(superTile) {
+      switch(superTile.extraAttr) {
 
         case CONFIG.bombType:
            return `res/bombie.png`;
@@ -173,7 +173,7 @@ const MainField = cc.Sprite.extend({
    * @private
    * @param {number} X position
    * @param {number} y position
-   * @return {Object} animation sequence 
+   * @return {Object} animation sequence
    */
 
   tileAnimation(locX, locY) {
