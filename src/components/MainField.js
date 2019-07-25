@@ -73,9 +73,11 @@ const MainField = cc.Sprite.extend({
       arr.forEach(tile => {
         if(!tile.isSuperTile) {
           const unify = new cc.MoveTo(CONFIG.stdAnimationTime, superTile.x, superTile.y);
+          const shrinking = new cc.ScaleTo(CONFIG.superTileAnimation, 0);
           const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
           const chain = new cc.Sequence(unify, deletion);
-          tile.runAction(chain);
+          const spawn = new cc.Spawn(shrinking, chain);
+          tile.runAction(spawn);
           this.fieldLogic.tilesSpr[tile.rowIndex][tile.colIndex] = null;
         }
       });
@@ -178,11 +180,9 @@ const MainField = cc.Sprite.extend({
 
   tileAnimation(locX, locY) {
     const slide = new cc.MoveTo(CONFIG.stdAnimationTime, locX, locY);
-    const delay = cc.delayTime((CONFIG.stdAnimationTime / 3) * 2); //to keep tile invisible for 2/3 of its way down
     const makeVisible = new cc.FadeIn(CONFIG.stdAnimationTime / 3);
-    const chain = new cc.Sequence(delay, makeVisible);
-    const spawn = new cc.Spawn(slide, chain);
+    const chain = new cc.Sequence(makeVisible, slide);
 
-    return spawn;
+    return chain;
   }
 });
