@@ -3,7 +3,7 @@ const CONFIG = {
   maxRows : 9,                     //rows on the gamefield
   maxCols : 9,                    //columns on the gamefield
   stdAnimationTime : 0.3,        //in seconds
-  superAssemblingTime: 0/2,     //time for supert tile animation
+  superAssemblingTime: 0.2,     //time for supert tile animation
   tileSize : 50,                //tiles are squares
   tileHalf: 25,
   base: 38,                   // coords to start tilesPos matrix

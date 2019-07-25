@@ -73,7 +73,7 @@ const MainField = cc.Sprite.extend({
       arr.forEach(tile => {
         if(!tile.isSuperTile) {
           const unify = new cc.MoveTo(CONFIG.stdAnimationTime, superTile.x, superTile.y);
-          const shrinking = new cc.ScaleTo(CONFIG.superTileAnimation, 0);
+          const shrinking = new cc.ScaleTo(CONFIG.superAssemblingTime, 0);
           const deletion = new cc.CallFunc(tile => this.removeChild(tile), this);
           const chain = new cc.Sequence(unify, deletion);
           const spawn = new cc.Spawn(shrinking, chain);
