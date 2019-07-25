@@ -44,7 +44,7 @@ const MainLayer = cc.Layer.extend({
 
       //Time for double click
       this.timeEnd = 0;
-      this.timeActivate = 300; //time interval between two clicks
+      this.timeActivate = 200; //time interval between two clicks
 
       //Delay for animation separation
       this.delay = cc.delayTime(CONFIG.stdAnimationTime);
